@@ -24,6 +24,15 @@ final class Settings
         'demo_pattern'     => 'http://demo{n}.164-68-121-142.sslip.io/',
         'radios_url'       => 'https://radiosdobrasil.midiaserver.com.br/',
         'conteudos_url'    => 'https://conteudospararadios.midiaserver.com.br/',
+        // Google Ads: rótulo de conversão no formato AW-XXXXXXXXX/abcDEFghi (um por evento)
+        'ads_conv_whatsapp_click'  => '',
+        'ads_conv_begin_checkout'  => '',
+        'ads_conv_generate_lead'   => '',
+        'ads_conv_file_download'   => '',
+        'ads_conv_view_demo'       => '',
+        'turnstile_site_key'       => '',
+        'turnstile_secret'         => '',
+        'lead_webhook_url'         => '',
     ];
 
     public static function get(string $key, ?string $default = null): string
@@ -57,6 +66,22 @@ final class Settings
             Db::run('INSERT INTO settings (`skey`, `svalue`) VALUES (?, ?)', [$key, $value]);
         }
         self::$cache = null;
+    }
+
+    /** Configuração de medição exposta ao navegador (somente IDs públicos, nunca segredos). */
+    public static function tracking(): array
+    {
+        $conv = [];
+        foreach (['whatsapp_click', 'begin_checkout', 'generate_lead', 'file_download', 'view_demo'] as $ev) {
+            $v = self::get('ads_conv_' . $ev);
+            if ($v !== '') {
+                $conv[$ev] = $v;
+            }
+        }
+        return [
+            'gtm' => self::get('gtm_id'), 'ga4' => self::get('ga4_id'), 'ads' => self::get('ads_id'),
+            'pixel' => self::get('meta_pixel_id'), 'conv' => (object) $conv,
+        ];
     }
 
     /** Link de WhatsApp com mensagem. */

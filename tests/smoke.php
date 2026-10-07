@@ -67,6 +67,22 @@ foreach ($internal as $href => $from) {
     t($code === 200 || $code === 301 || $code === 302, "link quebrado $href ($code) em " . implode(', ', array_slice($from, 0, 3)));
 }
 
+echo "\nLandings de campanha:\n";
+foreach (array_filter($pages, fn ($p) => ($p['template'] ?? '') === 'lp') as $path => $p) {
+    [, $html] = get($base . $path);
+    t(str_contains($html, 'data-lead') && str_contains($html, 'name="csrf"'), "$path tem formulário de lead com CSRF");
+    t(str_contains($html, 'noindex'), "$path é noindex");
+    t(str_contains($html, 'sticky-cta'), "$path tem barra fixa de contratação no celular");
+    t(!str_contains($html, 'class="topbar"') && !str_contains($html, 'id="nav"'), "$path sem menu (baixa distração)");
+}
+[, $b] = get($base . '/sitemap.xml');
+t(!str_contains($b, '/obrigado') && !str_contains($b, '/lead'), 'sitemap sem páginas de conversão');
+
+echo "\nAssets minificados:\n";
+$bj = json_decode((string) @file_get_contents(BASE_PATH . '/public/assets/.build.json'), true) ?: [];
+t(($bj['css'] ?? '') === sha1_file(BASE_PATH . '/public/assets/css/app.css'), 'app.min.css está atualizado (rode tools/build_assets.sh)');
+t(($bj['js'] ?? '') === sha1_file(BASE_PATH . '/public/assets/js/app.js'), 'app.min.js está atualizado (rode tools/build_assets.sh)');
+
 echo "\nTécnicos:\n";
 [$c, $b] = get($base . '/sitemap.xml'); t($c === 200 && str_contains($b, '<urlset'), 'sitemap.xml');
 t(!str_contains($b, '/lp/'), 'sitemap não deve listar landings de campanha');

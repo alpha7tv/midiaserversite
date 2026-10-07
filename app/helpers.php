@@ -55,3 +55,10 @@ function menu_href(string $href): string
         default => $href,
     };
 }
+
+/** Usa a versão minificada (.min) quando existir; senão, o arquivo-fonte. */
+function asset_min(string $path): string
+{
+    $min = preg_replace('/\.(css|js)$/', '.min.$1', $path);
+    return is_file(BASE_PATH . '/public/' . ltrim((string) $min, '/')) ? asset((string) $min) : asset($path);
+}

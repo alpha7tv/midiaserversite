@@ -423,6 +423,12 @@ return [
         'h1' => 'LGPD e direitos do titular', 'crumb' => 'LGPD', 'lead' => '', 'wa' => 'Olá, gostaria de exercer um direito previsto na LGPD.',
     ],
 
+    '/obrigado' => [
+        'template' => 'thanks', 'og' => 'home', 'noindex' => true, 'no_sitemap' => true,
+        'title' => 'Obrigado | Mídia Server', 'description' => 'Recebemos o seu contato.',
+        'h1' => 'Obrigado', 'crumb' => 'Obrigado', 'lead' => '', 'wa' => 'Olá, enviei o formulário no site da Mídia Server.',
+    ],
+
     // =====================================================================
     // Landings para campanhas (Google/Meta Ads): baixa distração, fora do sitemap, noindex.
     '/lp/streaming-radio' => [
@@ -466,5 +472,11 @@ return [
         'title' => 'Site para Web Rádio | Mídia Server', 'description' => 'Site para rádio com player ao vivo e 15 modelos. {min}/mês, grátis nos planos de streaming.',
         'h1' => 'O site da sua rádio, pronto e no ar', 'lead' => '15 modelos, player ao vivo e painel fácil. Grátis em todos os planos de streaming.',
         'cta' => 'QUERO O MEU SITE', 'wa' => 'Olá, gostaria de informações sobre os sites para rádio.',
+    ],
+    '/lp/web-radio-completa' => [
+        'template' => 'lp', 'lp_of' => '/web-radio-completa', 'product' => 'streaming', 'og' => 'web-radio-completa', 'noindex' => true, 'no_sitemap' => true, 'schema' => 'Service',
+        'title' => 'Crie sua Rádio Online Completa | Mídia Server', 'description' => 'Streaming, AutoDJ, site com player e painel para sua rádio online. A partir de {min}/mês.',
+        'h1' => 'Crie sua rádio online com tudo em um só lugar', 'lead' => 'Streaming, AutoDJ, site com player, painel de controle e endereço grátis para começar sua web rádio.',
+        'cta' => 'COLOCAR MINHA RÁDIO NO AR', 'wa' => 'Olá, gostaria de informações sobre a Web Rádio Completa.',
     ],
 ];

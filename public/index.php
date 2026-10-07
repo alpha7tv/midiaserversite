@@ -84,6 +84,15 @@ if (preg_match('#^/baixar/([a-z0-9-]+)$#', $uri, $m)) {
     exit;
 }
 
+if ($uri === '/lead' && $method !== 'POST') {
+    header('Location: /', true, 302);
+    exit;
+}
+if ($uri === '/lead' && $method === 'POST') {
+    \App\Controllers\LeadController::store();
+    exit;
+}
+
 $pages = require BASE_PATH . '/config/pages.php';
 if ($method !== 'GET' && $method !== 'HEAD') {
     http_response_code(405);

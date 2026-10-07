@@ -114,6 +114,11 @@ final class Schema
             id $pk, from_path VARCHAR(300) NOT NULL UNIQUE, to_path VARCHAR(300) NOT NULL,
             code $int NOT NULL DEFAULT 301, hits $int NOT NULL DEFAULT 0)$eng";
 
+        $t[] = "CREATE TABLE IF NOT EXISTS leads (
+            id $pk, name VARCHAR(120) NOT NULL, phone VARCHAR(20) NOT NULL, interest VARCHAR(80) NULL,
+            page VARCHAR(160) NULL, attribution $txt, ip_hash CHAR(64) NOT NULL, consent_text VARCHAR(300) NOT NULL,
+            status VARCHAR(20) NOT NULL DEFAULT 'new', created_at $ts)$eng";
+
         return $t;
     }
 }

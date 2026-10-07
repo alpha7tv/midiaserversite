@@ -92,6 +92,30 @@ switch ($cmd) {
         echo "Administrador criado.\n";
         break;
 
+    case 'setting:set':
+        $key = $argv[2] ?? '';
+        $val = $argv[3] ?? '';
+        if (!preg_match('/^[a-z0-9_]{2,100}$/', $key)) {
+            fwrite(STDERR, "Uso: bin/console setting:set chave valor\n");
+            exit(1);
+        }
+        App\Core\Settings::set($key, $val);
+        echo "OK: {$key} atualizado.\n";
+        break;
+
+    case 'setting:list':
+        foreach (Db::all('SELECT `skey`, `svalue` FROM settings ORDER BY `skey`') as $r) {
+            $secret = preg_match('/(secret|token|pass|key)/i', (string) $r['skey']);
+            echo $r['skey'] . ' = ' . ($secret ? '********' : $r['svalue']) . "\n";
+        }
+        break;
+
+    case 'leads:list':
+        foreach (Db::all('SELECT id, created_at, name, phone, interest, page, status FROM leads ORDER BY id DESC LIMIT 50') as $r) {
+            echo "#{$r['id']} {$r['created_at']} | {$r['name']} | {$r['phone']} | {$r['interest']} | {$r['page']} | {$r['status']}\n";
+        }
+        break;
+
     case 'sitemap':
         require BASE_PATH . '/app/Core/Seo.php';
         file_put_contents(BASE_PATH . '/public/sitemap.xml', App\Core\Seo::sitemapXml());
@@ -99,5 +123,5 @@ switch ($cmd) {
         break;
 
     default:
-        echo "Comandos: migrate | seed | admin:create | sitemap\n";
+        echo "Comandos: migrate | seed | admin:create | sitemap | setting:set | setting:list | leads:list\n";
 }

@@ -16,15 +16,15 @@ $wa = Settings::whatsapp((string) ($page['wa'] ?? 'Olá, vim pelo site da Mídia
 
 <link rel="icon" href="<?= asset('/assets/img/favicon.svg') ?>" type="image/svg+xml">
 <link rel="preload" href="/assets/fonts/sora-700.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="<?= asset('/assets/css/app.css') ?>">
-<script>window.dataLayer=window.dataLayer||[];window.MS={gtm:<?= json_encode($gtm) ?>,page:<?= json_encode((string) ($page['path'] ?? '/')) ?>};</script>
+<link rel="stylesheet" href="<?= asset_min('/assets/css/app.css') ?>">
+<script>window.dataLayer=window.dataLayer||[];window.MS=Object.assign(<?= json_encode(Settings::tracking(), JSON_UNESCAPED_SLASHES) ?>,{page:<?= json_encode((string) ($page['path'] ?? '/')) ?>});</script>
 </head>
 <body class="lp">
 <?php require BASE_PATH . '/views/partials/icons.php'; ?>
 <header class="hdr hdr-lp">
   <div class="wrap hdr-in">
     <a class="brand" href="/" aria-label="Mídia Server"><img src="/assets/img/logo-horizontal.svg" width="188" height="48" alt="Mídia Server" class="brand-light"><img src="/assets/img/logo-horizontal-dark.svg" width="188" height="48" alt="" class="brand-dark" aria-hidden="true"></a>
-    <a class="btn btn-wa btn-sm" href="<?= e($wa) ?>" target="_blank" rel="noopener" data-ev="whatsapp_click" data-where="lp-topo"><?= icon('whatsapp', 18) ?> <span>Falar no WhatsApp</span></a>
+    <a class="btn btn-wa btn-sm" href="<?= e($wa) ?>" target="_blank" rel="noopener" data-ev="whatsapp_click" data-where="lp-topo"><?= icon('whatsapp', 18) ?> <span><span class="hide-sm">Falar no </span>WhatsApp</span></a>
   </div>
 </header>
 <main id="conteudo"><?= $content ?></main>
@@ -34,6 +34,6 @@ $wa = Settings::whatsapp((string) ($page['wa'] ?? 'Olá, vim pelo site da Mídia
   <p>Usamos cookies para medir o desempenho do site e de anúncios. <a href="/politica-de-cookies">Saiba mais</a>.</p>
   <div class="consent-actions"><button type="button" class="btn btn-ghost btn-sm" data-consent="no">Recusar</button><button type="button" class="btn btn-primary btn-sm" data-consent="yes">Aceitar</button></div>
 </div>
-<script src="<?= asset('/assets/js/app.js') ?>" defer></script>
+<script src="<?= asset_min('/assets/js/app.js') ?>" defer></script>
 </body>
 </html>

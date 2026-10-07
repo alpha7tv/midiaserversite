@@ -34,11 +34,22 @@ tests/             smoke.php (teste de fumaça), router.php (servidor local)
 cp .env.example .env            # DB_DRIVER=sqlite, APP_URL=http://127.0.0.1:8081
 php bin/console migrate && php bin/console seed
 php -S 127.0.0.1:8081 -t public tests/router.php
-php tests/smoke.php http://127.0.0.1:8081
+php tests/smoke.php http://127.0.0.1:8081   # páginas, SEO, links, WHMCS, landings, assets
+php tests/lead.php  http://127.0.0.1:8081   # formulário de lead e anti-spam
+node tools/perf.js http://127.0.0.1:8081/   # LCP/CLS em perfil de celular
 ```
 
 ## Instalação na VPS (staging)
 Veja `deploy/install.sh`. Roda como usuário comum, sem sudo, e só mexe no vhost do domínio de teste.
+
+## Google Ads e medição
+Guia completo em `docs/GOOGLE-ADS.md` (estrutura de campanhas, anúncios, conversões e a conversão de compra no WHMCS) e arquivos
+para o Google Ads Editor em `docs/ads/` (palavras-chave, negativas, anúncios). Regerar: `python3 tools/ads_blueprint.py`.
+Configuração (IDs públicos, via console): `php bin/console setting:set ads_id AW-XXXX` (e `ga4_id`, `gtm_id`, `meta_pixel_id`,
+`ads_conv_generate_lead`, `ads_conv_whatsapp_click`, ...). Leads das landings: `php bin/console leads:list`.
+
+## Assets
+Depois de alterar `public/assets/css/app.css` ou `js/app.js`, rode `bash tools/build_assets.sh` (gera os `.min` e o hash conferido pelo teste).
 
 ## Etapas
 1. **Entregue:** estrutura, design system, logo, home, páginas de produto com links reais do WHMCS, SEO base, schema, sitemap, robots, WhatsApp, LGPD, landings de Ads, downloads, busca.

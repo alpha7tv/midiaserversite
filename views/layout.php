@@ -20,8 +20,8 @@ $wa = Settings::whatsapp((string) ($page['wa'] ?? 'Olá, vim pelo site da Mídia
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/assets/fonts/sora-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="<?= asset('/assets/css/app.css') ?>">
-<script>window.dataLayer=window.dataLayer||[];window.MS={gtm:<?= json_encode($gtm) ?>,page:<?= json_encode((string) ($page['path'] ?? '/')) ?>};</script>
+<link rel="stylesheet" href="<?= asset_min('/assets/css/app.css') ?>">
+<script>window.dataLayer=window.dataLayer||[];window.MS=Object.assign(<?= json_encode(Settings::tracking(), JSON_UNESCAPED_SLASHES) ?>,{page:<?= json_encode((string) ($page['path'] ?? '/')) ?>});</script>
 </head>
 <body>
 <a class="skip" href="#conteudo">Ir para o conteúdo</a>
@@ -38,6 +38,6 @@ $wa = Settings::whatsapp((string) ($page['wa'] ?? 'Olá, vim pelo site da Mídia
   <p>Usamos cookies para medir o desempenho do site e de anúncios. Você pode aceitar ou recusar. <a href="/politica-de-cookies">Saiba mais</a>.</p>
   <div class="consent-actions"><button type="button" class="btn btn-ghost btn-sm" data-consent="no">Recusar</button><button type="button" class="btn btn-primary btn-sm" data-consent="yes">Aceitar</button></div>
 </div>
-<script src="<?= asset('/assets/js/app.js') ?>" defer></script>
+<script src="<?= asset_min('/assets/js/app.js') ?>" defer></script>
 </body>
 </html>

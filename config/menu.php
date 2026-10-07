@@ -23,6 +23,7 @@ return [
         ['Download / Demonstração', '/automacao-radio#download'],
     ]],
     ['label' => 'Conteúdos', 'items' => [
+        ['Ouvir amostras', '/conteudos-para-radio#amostras'],
         ['Programas', '/conteudos-para-radio#categorias'],
         ['Programetes', '/conteudos-para-radio#categorias'],
         ['Conteúdo diário', '/conteudos-para-radio#como-funciona'],
