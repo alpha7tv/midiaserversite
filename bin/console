@@ -148,6 +148,28 @@ switch ($cmd) {
         echo "Newsletter: {$total['sent']} enviados, {$total['failed']} falhas.\n";
         break;
 
+    case 'admin:list':
+        foreach (Db::all('SELECT id, name, email, role, last_login_at FROM admins ORDER BY id') as $r) {
+            echo "#{$r['id']} {$r['email']} ({$r['name']}) último login: " . ($r['last_login_at'] ?: 'nunca') . "\n";
+        }
+        $t = Db::all("SELECT success, COUNT(*) n FROM login_attempts WHERE created_at > '" . date('Y-m-d H:i:s', time() - 3600) . "' GROUP BY success");
+        foreach ($t as $r) {
+            echo ($r['success'] ? 'logins ok' : 'logins falhos') . ' na última hora: ' . $r['n'] . "\n";
+        }
+        break;
+
+    case 'admin:passwd':
+        $email = mb_strtolower(trim($argv[2] ?? ''));
+        $pass = trim((string) fgets(STDIN));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($pass) < 10) {
+            fwrite(STDERR, "Uso: read -rs P; printf '%s' \"\$P\" | php bin/console admin:passwd email@dominio  (senha com 10+ caracteres)\n");
+            exit(1);
+        }
+        $n = Db::run('UPDATE admins SET password_hash = ? WHERE email = ?', [password_hash($pass, PASSWORD_ARGON2ID), $email]);
+        Db::run('DELETE FROM login_attempts');
+        echo $n ? "Senha redefinida e bloqueios de login limpos.\n" : "Nenhum administrador com esse e-mail. Use admin:list.\n";
+        break;
+
     case 'sitemap':
         require BASE_PATH . '/app/Core/Seo.php';
         file_put_contents(BASE_PATH . '/public/sitemap.xml', App\Core\Seo::sitemapXml());
@@ -155,5 +177,5 @@ switch ($cmd) {
         break;
 
     default:
-        echo "Comandos: migrate | seed | admin:create | sitemap | setting:set | setting:list | leads:list | newsletter:send\n";
+        echo "Comandos: migrate | seed | admin:create | sitemap | setting:set | setting:list | leads:list | newsletter:send | admin:list | admin:passwd\n";
 }

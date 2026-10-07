@@ -18,6 +18,7 @@ final class Login
         }
         $error = '';
         if ($method === 'POST') {
+          try {
             $email = (string) ($_POST['email'] ?? '');
             if (!Session::csrfOk((string) ($_POST['csrf'] ?? ''))) {
                 $error = 'Sessão expirada. Tente novamente.';
@@ -33,6 +34,11 @@ final class Login
                 $error = 'E-mail ou senha incorretos.';
                 Audit::log('login_falhou', null, ['email_tail' => substr($email, -6)]);
             }
+          } catch (\Throwable $e) {
+            \App\Core\Logger::write('admin', 'erro_login', ['error' => $e->getMessage()]);
+            http_response_code(500);
+            $error = 'Erro interno ao entrar. Peça para rodar "php bin/console migrate" e conferir storage/logs/admin.log.';
+          }
         }
         echo View::render('admin/layout', ['title' => 'Entrar', 'content' => View::render('admin/login', ['error' => $error])]);
     }
