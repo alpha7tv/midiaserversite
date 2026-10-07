@@ -1,0 +1,103 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+require dirname(__DIR__) . '/bootstrap.php';
+require BASE_PATH . '/database/Schema.php';
+
+use App\Core\Db;
+
+$cmd = $argv[1] ?? 'help';
+
+switch ($cmd) {
+    case 'migrate':
+        foreach (Schema::statements(Db::driver()) as $sql) {
+            Db::pdo()->exec($sql);
+        }
+        echo "Tabelas criadas/atualizadas.\n";
+        break;
+
+    case 'seed':
+        $data = require BASE_PATH . '/database/seeds/catalog.php';
+        $pdo = Db::pdo();
+        $pdo->beginTransaction();
+        $catIds = [];
+        foreach ($data['categories'] as $c) {
+            if (!Db::one('SELECT id FROM categories WHERE slug = ?', [$c['slug']])) {
+                Db::run('INSERT INTO categories (slug, name, type, sort_order) VALUES (?,?,?,?)', [$c['slug'], $c['name'], $c['type'], $c['sort_order']]);
+            }
+            $catIds[$c['slug']] = (int) Db::one('SELECT id FROM categories WHERE slug = ?', [$c['slug']])['id'];
+        }
+        $prodIds = [];
+        foreach ($data['products'] as $p) {
+            if (!Db::one('SELECT id FROM products WHERE slug = ?', [$p['slug']])) {
+                Db::run(
+                    'INSERT INTO products (slug, name, category_id, whmcs_group, sort_order) VALUES (?,?,?,?,?)',
+                    [$p['slug'], $p['name'], $catIds[$p['cat']] ?? null, $p['whmcs_group'], $p['sort_order']]
+                );
+            }
+            $prodIds[$p['slug']] = (int) Db::one('SELECT id FROM products WHERE slug = ?', [$p['slug']])['id'];
+        }
+        $n = 0;
+        foreach ($data['plans'] as $pl) {
+            $exists = Db::one('SELECT id FROM plans WHERE whmcs_pid = ?', [$pl['pid']]);
+            // se o plano já existe, NÃO sobrescreve (preço pode ter sido ajustado no painel)
+            if ($exists) {
+                continue;
+            }
+            Db::run(
+                'INSERT INTO plans (product_id, whmcs_pid, name, price_month, price_year, highlight, includes_site, specs, sort_order, synced_at)
+                 VALUES (?,?,?,?,?,?,?,?,?,?)',
+                [
+                    $prodIds[$pl['product']], $pl['pid'], $pl['name'], $pl['price'], $pl['price_year'] ?? null,
+                    $pl['highlight'] ?? 0, $pl['includes_site'] ?? 0,
+                    json_encode($pl['specs'], JSON_UNESCAPED_UNICODE), $pl['sort'] ?? 0, date('Y-m-d H:i:s'),
+                ]
+            );
+            $n++;
+        }
+        $pdo->commit();
+
+        $dl = require BASE_PATH . '/database/seeds/downloads.php';
+        $nd = 0;
+        foreach ($dl as $d) {
+            if (Db::one('SELECT id FROM downloads WHERE slug = ?', [$d['slug']])) {
+                continue;
+            }
+            $own = !empty($d['own']);
+            Db::run(
+                'INSERT INTO downloads (category_id, slug, name, description, os, size_bytes, file_url, license_note, external, released_at)
+                 VALUES (?,?,?,?,?,?,?,?,?,?)',
+                [
+                    $catIds[$d['cat']] ?? null, $d['slug'], $d['name'], $d['description'], $d['os'] ?? null,
+                    $d['size_bytes'] ?? null, $own ? null : $d['file_url'], $d['license_note'] ?? null,
+                    $own ? 0 : 1, $d['released_at'] ?? null,
+                ]
+            );
+            $nd++;
+        }
+        echo "Downloads carregados ({$nd} novos).\n";
+        echo "Catálogo carregado ({$n} planos novos).\n";
+        break;
+
+    case 'admin:create':
+        $name = $argv[2] ?? '';
+        $email = $argv[3] ?? '';
+        $pass = trim((string) fgets(STDIN));
+        if ($name === '' || $email === '' || strlen($pass) < 10) {
+            fwrite(STDERR, "Uso: printf 'SENHA-com-10+-caracteres' | bin/console admin:create \"Nome\" email@dominio\n");
+            exit(1);
+        }
+        Db::run('INSERT INTO admins (name, email, password_hash) VALUES (?,?,?)', [$name, $email, password_hash($pass, PASSWORD_ARGON2ID)]);
+        echo "Administrador criado.\n";
+        break;
+
+    case 'sitemap':
+        require BASE_PATH . '/app/Core/Seo.php';
+        file_put_contents(BASE_PATH . '/public/sitemap.xml', App\Core\Seo::sitemapXml());
+        echo "sitemap.xml gerado.\n";
+        break;
+
+    default:
+        echo "Comandos: migrate | seed | admin:create | sitemap\n";
+}

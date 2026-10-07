@@ -1,0 +1,10 @@
+.env
+storage/logs/*
+storage/cache/*
+storage/*.sqlite
+!storage/logs/.gitkeep
+!storage/cache/.gitkeep
+node_modules/
+vendor/
+*.log
+public/sitemap.xml
