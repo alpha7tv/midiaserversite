@@ -27,12 +27,14 @@ for ext in pdo_mysql mbstring json; do php -m | grep -qix "$ext" || fail "extens
 [ -w "$VHOST" ] || [ ! -e "$VHOST" ] || fail "Sem permissão de escrita em $VHOST (rode o Passo 1 como root)."
 sudo -n "$(command -v nginx || echo /usr/sbin/nginx)" -t >/dev/null 2>&1 || fail "sudo para 'nginx -t' não liberado para o claudeops."
 
-say "2/8 Baixando o código ($REPO)"
+say "2/8 Código do portal"
 if [ -d "$APP_DIR/.git" ]; then
   git -C "$APP_DIR" fetch --depth=1 origin "$BRANCH"
   git -C "$APP_DIR" reset --hard "origin/$BRANCH"
+elif [ -f "$APP_DIR/bin/console" ] && [ -f "$APP_DIR/bootstrap.php" ]; then
+  echo "Código já presente em $APP_DIR (enviado por arquivo): usando como está."
 else
-  if [ -n "$(ls -A "$APP_DIR" 2>/dev/null)" ]; then fail "$APP_DIR não está vazia e não é um repositório git."; fi
+  if [ -n "$(ls -A "$APP_DIR" 2>/dev/null)" ]; then fail "$APP_DIR não está vazia e não contém o portal."; fi
   git clone --depth=1 --branch "$BRANCH" "$REPO" "$APP_DIR"
 fi
 cd "$APP_DIR"
