@@ -6,7 +6,7 @@ set -euo pipefail
 
 APP_DIR="${APP_DIR:-/var/www/portal-novo}"
 DOMAIN="${DOMAIN:-novo.midiaserver.com.br}"
-REPO="${REPO:-https://github.com/alpha7tv/midiaserver-portal.git}"
+REPO="${REPO:-https://github.com/alpha7tv/midiaserversite.git}"
 BRANCH="${BRANCH:-main}"
 DB_FILE="${DB_FILE:-$HOME/.portal-db}"
 APP_ENV_VALUE="${APP_ENV_VALUE:-staging}"
