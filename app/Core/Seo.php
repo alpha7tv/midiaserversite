@@ -14,7 +14,7 @@ final class Seo
         $path = (string) ($page['path'] ?? '/');
         $canonical = app_url($path === '/' ? '' : $path);
         $robots = (!empty($page['noindex']) || env('APP_ENV', 'production') !== 'production') ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
-        $ogImage = app_url('/assets/img/og/' . ($page['og'] ?? 'home') . '.png');
+        $ogImage = !empty($page['og_url']) ? (string) $page['og_url'] : app_url('/assets/img/og/' . ($page['og'] ?? 'home') . '.png');
         $type = (string) ($page['og_type'] ?? 'website');
 
         $h = [];
@@ -122,6 +122,18 @@ final class Seo
             $out[] = $base;
         }
 
+        if (!empty($page['article'])) {
+            $a = $page['article'];
+            $out[] = [
+                '@context' => 'https://schema.org', '@type' => 'Article', 'headline' => (string) $a['title'],
+                'description' => (string) $page['description'], 'mainEntityOfPage' => $canonical,
+                'datePublished' => (string) $a['published'], 'dateModified' => (string) ($a['modified'] ?? $a['published']),
+                'image' => !empty($page['og_url']) ? (string) $page['og_url'] : app_url('/assets/img/og/blog.png'),
+                'author' => ['@type' => 'Organization', 'name' => Settings::get('site_name')],
+                'publisher' => ['@type' => 'Organization', 'name' => Settings::get('site_name'), 'logo' => ['@type' => 'ImageObject', 'url' => app_url('/assets/img/icon-512.png')]],
+            ];
+        }
+
         if (!empty($page['faq'])) {
             $qa = [];
             foreach ($page['faq'] as [$q, $a]) {
@@ -143,6 +155,12 @@ final class Seo
             }
             $prio = $path === '/' ? '1.0' : (!empty($p['product']) ? '0.9' : '0.6');
             $xml[] = '  <url><loc>' . e(app_url($path === '/' ? '' : $path)) . '</loc><lastmod>' . $today . '</lastmod><priority>' . $prio . '</priority></url>';
+        }
+        try {
+            foreach (Db::all("SELECT slug, published_at FROM posts WHERE status = 'published' ORDER BY published_at DESC LIMIT 2000") as $r) {
+                $xml[] = '  <url><loc>' . e(app_url('/blog/' . $r['slug'])) . '</loc><lastmod>' . e(substr((string) $r['published_at'], 0, 10)) . '</lastmod><priority>0.5</priority></url>';
+            }
+        } catch (\Throwable) {
         }
         $xml[] = '</urlset>';
         return implode("\n", $xml) . "\n";

@@ -84,12 +84,37 @@ if (preg_match('#^/baixar/([a-z0-9-]+)$#', $uri, $m)) {
     exit;
 }
 
+if ($uri === '/admin' || str_starts_with($uri, '/admin/')) {
+    \App\Admin\Kernel::dispatch($uri, $method);
+    exit;
+}
+if ($uri === '/newsletter/inscrever' && $method === 'POST') {
+    \App\Controllers\NewsletterController::subscribe();
+    exit;
+}
+if ($uri === '/newsletter/confirmar' && $method === 'GET') {
+    \App\Controllers\NewsletterController::confirm();
+    exit;
+}
+if ($uri === '/newsletter/sair' && ($method === 'GET' || $method === 'POST')) {
+    \App\Controllers\NewsletterController::unsubscribe($method);
+    exit;
+}
+if ($uri === '/api/v1/studio/version') {
+    \App\Controllers\ApiController::studioVersion($method);
+    exit;
+}
 if ($uri === '/lead' && $method !== 'POST') {
     header('Location: /', true, 302);
     exit;
 }
 if ($uri === '/lead' && $method === 'POST') {
     \App\Controllers\LeadController::store();
+    exit;
+}
+
+if (preg_match('#^/blog/([a-z0-9-]{1,120})$#', $uri, $bm) && ($method === 'GET' || $method === 'HEAD')) {
+    \App\Controllers\BlogController::show($bm[1]);
     exit;
 }
 

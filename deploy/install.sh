@@ -63,7 +63,7 @@ else
 fi
 chmod 640 .env
 chgrp www-data .env 2>/dev/null || true
-mkdir -p storage/logs storage/cache
+mkdir -p storage/logs storage/cache storage/sessions
 chmod -R g+w storage 2>/dev/null || true
 
 say "4/8 Banco de dados (tabelas e catálogo)"

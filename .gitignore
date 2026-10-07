@@ -8,3 +8,5 @@ node_modules/
 vendor/
 *.log
 public/sitemap.xml
+storage/sessions/*
+!storage/sessions/.gitkeep

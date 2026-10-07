@@ -4,6 +4,19 @@ use App\Core\Whmcs;
 ?>
 <footer class="ftr">
   <div class="wrap">
+    <?php if (\App\Core\Mailer::configured()): [$nts, $nsig] = \App\Core\Csrf::stamp(); ?>
+    <form class="nl" method="post" action="/newsletter/inscrever">
+      <div><h2 class="ftr-h" style="margin:0 0 4px">Receba novidades, promoções e ferramentas para sua rádio</h2>
+      <p class="nl-note">Enviaremos um e-mail para você confirmar. Ao se inscrever, você concorda com a <a href="/politica-de-privacidade">Política de Privacidade</a>. Cancele quando quiser.</p></div>
+      <div class="nl-row">
+        <label class="sr" for="nl-email">Seu e-mail</label>
+        <input id="nl-email" name="email" type="email" required maxlength="190" autocomplete="email" placeholder="seu@email.com">
+        <input type="hidden" name="ts" value="<?= e($nts) ?>"><input type="hidden" name="sig" value="<?= e($nsig) ?>"><input type="hidden" name="source" value="<?= e((string) ($page['path'] ?? '/')) ?>">
+        <div class="hp" aria-hidden="true"><label>Não preencha <input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <button class="btn btn-primary" type="submit" data-ev="cta_click" data-where="newsletter">QUERO RECEBER</button>
+      </div>
+    </form>
+    <?php endif; ?>
     <div class="ftr-grid">
       <div class="ftr-brand">
         <img src="/assets/img/logo-horizontal-dark.svg" width="188" height="48" alt="Mídia Server" loading="lazy">

@@ -119,6 +119,27 @@ final class Schema
             page VARCHAR(160) NULL, attribution $txt, ip_hash CHAR(64) NOT NULL, consent_text VARCHAR(300) NOT NULL,
             status VARCHAR(20) NOT NULL DEFAULT 'new', created_at $ts)$eng";
 
+        $t[] = "CREATE TABLE IF NOT EXISTS campaigns (
+            id $pk, subject VARCHAR(200) NOT NULL, body_html $txt, body_text $txt, source VARCHAR(30) NOT NULL DEFAULT 'manual',
+            status VARCHAR(20) NOT NULL DEFAULT 'draft', last_id $int NOT NULL DEFAULT 0, total_count $int NOT NULL DEFAULT 0,
+            sent_count $int NOT NULL DEFAULT 0, failed_count $int NOT NULL DEFAULT 0, created_by $int NULL,
+            created_at $ts, started_at TIMESTAMP NULL, finished_at TIMESTAMP NULL)$eng";
+
+        $t[] = "CREATE TABLE IF NOT EXISTS login_attempts (
+            id $pk, ip_hash CHAR(64) NOT NULL, email_hash CHAR(64) NOT NULL, success $int NOT NULL DEFAULT 0, created_at $ts)$eng";
+
         return $t;
+    }
+
+    /** Alterações incrementais (executadas uma única vez cada, registradas em migrations). @return array<string,string> */
+    public static function alters(): array
+    {
+        return [
+            '001_posts_kind'            => 'ALTER TABLE posts ADD COLUMN kind VARCHAR(30) NULL',
+            '002_posts_notify_push'     => 'ALTER TABLE posts ADD COLUMN notify_push INTEGER NOT NULL DEFAULT 0',
+            '003_posts_notify_newsletter' => 'ALTER TABLE posts ADD COLUMN notify_newsletter INTEGER NOT NULL DEFAULT 0',
+            '004_subscribers_confirmed_at' => 'ALTER TABLE newsletter_subscribers ADD COLUMN confirmed_at TIMESTAMP NULL',
+            '005_versions_campaign'     => 'ALTER TABLE software_versions ADD COLUMN campaign_id INTEGER NULL',
+        ];
     }
 }

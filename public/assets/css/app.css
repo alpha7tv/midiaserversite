@@ -247,6 +247,12 @@ a.card:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:rgba(4
 .ftr-legal{display:flex;flex-wrap:wrap;gap:6px 18px}
 .ftr-lp{padding-top:0}.ftr-lp .ftr-bottom{margin-top:0;border:0}
 
+/* newsletter no rodapé */
+.nl{display:grid;gap:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:20px;margin-bottom:36px}
+.nl-note{margin:0;font-size:13px;color:var(--on-dark-2)}
+.nl-row{display:flex;gap:10px;flex-wrap:wrap}.nl-row input[type=email]{flex:1 1 220px;min-height:46px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:#fff;color:var(--text);font:inherit}
+@media (min-width:900px){.nl{grid-template-columns:1fr 1fr;align-items:center}}
+
 /* WhatsApp flutuante + consentimento */
 .wa-float{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:90;width:56px;height:56px;border-radius:50%;background:var(--wa);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(31,170,89,.45)}
 .wa-float:hover{background:var(--wa-d)}

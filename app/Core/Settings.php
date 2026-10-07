@@ -33,6 +33,15 @@ final class Settings
         'turnstile_site_key'       => '',
         'turnstile_secret'         => '',
         'lead_webhook_url'         => '',
+        'studio_webhook_secret'    => '',
+        'smtp_host'                => '',
+        'smtp_port'                => '587',
+        'smtp_secure'              => 'tls',
+        'smtp_user'                => '',
+        'smtp_pass'                => '',
+        'smtp_from_email'          => '',
+        'smtp_from_name'           => 'Mídia Server',
+        'newsletter_footer'        => 'Você recebe este e-mail porque se inscreveu na newsletter da Mídia Server.',
     ];
 
     public static function get(string $key, ?string $default = null): string
@@ -48,7 +57,7 @@ final class Settings
             }
         }
         if (isset(self::$cache[$key]) && self::$cache[$key] !== '') {
-            return self::$cache[$key];
+            return Crypto::isSecretKey($key) ? Crypto::decrypt(self::$cache[$key]) : self::$cache[$key];
         }
         $fromEnv = env(strtoupper($key));
         if ($fromEnv !== null && $fromEnv !== '') {
@@ -59,6 +68,9 @@ final class Settings
 
     public static function set(string $key, string $value): void
     {
+        if (Crypto::isSecretKey($key) && $value !== '') {
+            $value = Crypto::encrypt($value);
+        }
         $exists = Db::one('SELECT 1 AS x FROM settings WHERE `skey` = ?', [$key]);
         if ($exists) {
             Db::run('UPDATE settings SET `svalue` = ? WHERE `skey` = ?', [$value, $key]);
@@ -66,6 +78,16 @@ final class Settings
             Db::run('INSERT INTO settings (`skey`, `svalue`) VALUES (?, ?)', [$key, $value]);
         }
         self::$cache = null;
+    }
+
+    /** @return array<string,string> chaves salvas no banco (valores sensíveis mascarados) */
+    public static function allStored(): array
+    {
+        $out = [];
+        foreach (Db::all('SELECT `skey`, `svalue` FROM settings') as $r) {
+            $out[(string) $r['skey']] = (string) $r['svalue'];
+        }
+        return $out;
     }
 
     /** Configuração de medição exposta ao navegador (somente IDs públicos, nunca segredos). */

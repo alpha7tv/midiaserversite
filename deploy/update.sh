@@ -6,6 +6,7 @@ BRANCH="${BRANCH:-main}"
 cd "$APP_DIR"
 git fetch --depth=1 origin "$BRANCH"
 git reset --hard "origin/$BRANCH"
+mkdir -p storage/logs storage/cache storage/sessions && chmod -R g+w storage 2>/dev/null || true
 php bin/console migrate
 php bin/console seed
 php bin/console sitemap

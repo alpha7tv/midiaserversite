@@ -14,6 +14,19 @@ switch ($cmd) {
         foreach (Schema::statements(Db::driver()) as $sql) {
             Db::pdo()->exec($sql);
         }
+        foreach (Schema::alters() as $name => $sql) {
+            if (!Db::one('SELECT id FROM migrations WHERE name = ?', [$name])) {
+                try {
+                    Db::pdo()->exec($sql);
+                } catch (\Throwable $e) {
+                    // coluna já existe (instalação anterior): registra e segue
+                    if (!preg_match('/duplicate column|already exists/i', $e->getMessage())) {
+                        throw $e;
+                    }
+                }
+                Db::run('INSERT INTO migrations (name) VALUES (?)', [$name]);
+            }
+        }
         echo "Tabelas criadas/atualizadas.\n";
         break;
 
@@ -82,9 +95,9 @@ switch ($cmd) {
 
     case 'admin:create':
         $name = $argv[2] ?? '';
-        $email = $argv[3] ?? '';
+        $email = mb_strtolower(trim($argv[3] ?? ''));
         $pass = trim((string) fgets(STDIN));
-        if ($name === '' || $email === '' || strlen($pass) < 10) {
+        if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($pass) < 10) {
             fwrite(STDERR, "Uso: printf 'SENHA-com-10+-caracteres' | bin/console admin:create \"Nome\" email@dominio\n");
             exit(1);
         }
@@ -116,6 +129,25 @@ switch ($cmd) {
         }
         break;
 
+    case 'newsletter:send':
+        // Para o cron (a cada 5 min): processa a campanha em envio, em lotes. Só inscritos confirmados.
+        $lock = fopen(BASE_PATH . '/storage/cache/newsletter.lock', 'c');
+        if (!flock($lock, LOCK_EX | LOCK_NB)) {
+            echo "Outro envio em andamento.\n";
+            break;
+        }
+        $total = ['sent' => 0, 'failed' => 0];
+        for ($i = 0; $i < 20; $i++) {
+            $r = App\Services\NewsletterSender::runBatch(50);
+            $total['sent'] += $r['sent'];
+            $total['failed'] += $r['failed'];
+            if ($r['done']) {
+                break;
+            }
+        }
+        echo "Newsletter: {$total['sent']} enviados, {$total['failed']} falhas.\n";
+        break;
+
     case 'sitemap':
         require BASE_PATH . '/app/Core/Seo.php';
         file_put_contents(BASE_PATH . '/public/sitemap.xml', App\Core\Seo::sitemapXml());
@@ -123,5 +155,5 @@ switch ($cmd) {
         break;
 
     default:
-        echo "Comandos: migrate | seed | admin:create | sitemap | setting:set | setting:list | leads:list\n";
+        echo "Comandos: migrate | seed | admin:create | sitemap | setting:set | setting:list | leads:list | newsletter:send\n";
 }

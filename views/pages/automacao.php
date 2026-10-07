@@ -96,8 +96,8 @@ require BASE_PATH . '/views/partials/hero.php';
     <div class="card version">
       <p class="badge">Nova versão disponível</p>
       <h3>v<?= e((string) $latest['version']) ?> <small><?= !empty($latest['released_at']) ? e(date('d/m/Y', strtotime((string) $latest['released_at']))) : '' ?></small></h3>
-      <?php if (!empty($latest['notes'])): ?><h4>Novidades</h4><div class="prose"><?= nl2br(e((string) $latest['notes'])) ?></div><?php endif; ?>
-      <?php if (!empty($latest['fixes'])): ?><h4>Correções</h4><div class="prose"><?= nl2br(e((string) $latest['fixes'])) ?></div><?php endif; ?>
+      <?php if (!empty($latest['notes'])): ?><h4>Novidades</h4><div class="prose"><?= \App\Core\Markup::toHtml((string) $latest['notes']) ?></div><?php endif; ?>
+      <?php if (!empty($latest['fixes'])): ?><h4>Correções</h4><div class="prose"><?= \App\Core\Markup::toHtml((string) $latest['fixes']) ?></div><?php endif; ?>
       <p><a class="btn btn-primary" href="/baixar/midia-radio-studio" data-ev="file_download" data-file="Mídia Rádio Studio v<?= e((string) $latest['version']) ?>"><?= icon('download', 20) ?> Baixar / atualizar</a></p>
     </div>
     <?php if (count($versions) > 1): ?>

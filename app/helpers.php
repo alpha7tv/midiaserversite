@@ -62,3 +62,13 @@ function asset_min(string $path): string
     $min = preg_replace('/\.(css|js)$/', '.min.$1', $path);
     return is_file(BASE_PATH . '/public/' . ltrim((string) $min, '/')) ? asset((string) $min) : asset($path);
 }
+
+function csrf_field(): string
+{
+    return '<input type="hidden" name="csrf" value="' . e(\App\Admin\Session::csrf()) . '">';
+}
+
+function old(string $key, mixed $default = ''): string
+{
+    return e((string) ($_POST[$key] ?? $default));
+}

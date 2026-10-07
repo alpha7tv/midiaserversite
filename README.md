@@ -42,6 +42,24 @@ node tools/perf.js http://127.0.0.1:8081/   # LCP/CLS em perfil de celular
 ## Instalação na VPS (staging)
 Veja `deploy/install.sh`. Roda como usuário comum, sem sudo, e só mexe no vhost do domínio de teste.
 
+## Painel administrativo (/admin)
+Login com e-mail e senha (Argon2id), sessão Secure/HttpOnly/SameSite=Strict, CSRF em todo POST, limite de tentativas, auditoria de ações.
+Telas: visão geral, leads (status, CSV, exclusão LGPD), planos e preços (com conferência contra a vitrine do WHMCS e aplicação **manual**),
+configurações (WhatsApp, Google Ads/GA4/GTM/Pixel, Turnstile, integrações, SMTP; segredos criptografados), downloads, versões do Studio
+(webhook assinado `POST /api/v1/studio/version`, a versão chega como rascunho), publicar novidade (site / newsletter / Web Push, sempre por escolha),
+newsletter (dupla confirmação, campanhas, envio em lotes), redirects 301, logs e minha conta.
+
+Criar o administrador (na VPS, a senha não aparece nem fica no histórico):
+```bash
+read -rs P; printf '%s' "$P" | php bin/console admin:create "Seu Nome" voce@dominio.com; unset P
+```
+Envio agendado da newsletter e backup do banco (crontab do `claudeops`):
+```
+*/5 * * * * cd /var/www/portal-novo && php bin/console newsletter:send >> storage/logs/newsletter-cron.log 2>&1
+30 3 * * *  bash /var/www/portal-novo/deploy/backup.sh >> /home/claudeops/backups-portal.log 2>&1
+```
+Testes: `php tests/admin.php http://127.0.0.1:8081` (precisa do SMTP falso: `python3 tests/fake_smtp.py 2525`).
+
 ## Google Ads e medição
 Guia completo em `docs/GOOGLE-ADS.md` (estrutura de campanhas, anúncios, conversões e a conversão de compra no WHMCS) e arquivos
 para o Google Ads Editor em `docs/ads/` (palavras-chave, negativas, anúncios). Regerar: `python3 tools/ads_blueprint.py`.
@@ -53,8 +71,8 @@ Depois de alterar `public/assets/css/app.css` ou `js/app.js`, rode `bash tools/b
 
 ## Etapas
 1. **Entregue:** estrutura, design system, logo, home, páginas de produto com links reais do WHMCS, SEO base, schema, sitemap, robots, WhatsApp, LGPD, landings de Ads, downloads, busca.
-2. **Próxima:** painel administrativo, blog, webhook de versões do Studio, newsletter e Web Push.
-3. **Depois:** integração do cadastro de rádios, destaques, Pixel/Conversions API, redirects 301 a partir do Search Console, testes finais e publicação.
+2. **Entregue:** painel administrativo, blog, webhook de versões do Studio, newsletter com dupla confirmação, leads e landings de Ads.
+3. **Próxima:** envio de Web Push (chaves VAPID), formulário próprio de cadastro de rádios com moderação, destaques, Conversions API (servidor), webhook de compra do WHMCS, 2FA do painel.
 
 ## Pendências conhecidas
 - Plano de VPS Linux ainda não existe no WHMCS (`/vps` fica "em breve").
