@@ -82,7 +82,7 @@ echo "PHP-FPM: $PHPSOCK"
 if [ -f "$VHOST" ] && grep -q 'ssl_certificate' "$VHOST"; then
   echo "vhost já tem SSL configurado: mantido sem alterações."
 else
-  sed -e "s#__DOMAIN__#$DOMAIN#g" -e "s#__ROOT__#$APP_DIR#g" -e "s#__PHPSOCK__#$PHPSOCK#g" deploy/nginx.vhost.tpl > "$VHOST"
+  sed -e "s#__DOMAIN__#$DOMAIN#g" -e "s#__ALIASES__##g" -e "s#__ROOT__#$APP_DIR#g" -e "s#__PHPSOCK__#$PHPSOCK#g" deploy/nginx.vhost.tpl > "$VHOST"
   [ -e "/etc/nginx/sites-enabled/$DOMAIN" ] || fail "Falta o link /etc/nginx/sites-enabled/$DOMAIN (rode o Passo 1 como root)."
 fi
 

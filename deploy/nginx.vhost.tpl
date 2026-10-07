@@ -2,7 +2,7 @@
 server {
     listen 80;
     listen [::]:80;
-    server_name __DOMAIN__;
+    server_name __DOMAIN__ __ALIASES__;
 
     root __ROOT__/public;
     index index.php;
