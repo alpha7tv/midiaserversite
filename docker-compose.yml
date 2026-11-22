@@ -1,0 +1,14 @@
+# Projeto isolado: nome próprio, rede própria, porta só em 127.0.0.1 (o nginx do host faz o proxy).
+name: cinepulse
+services:
+  web:
+    build: .
+    container_name: cinepulse-web
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3080}:3000"
+    volumes:
+      - cinepulse-data:/app/data
+volumes:
+  cinepulse-data:

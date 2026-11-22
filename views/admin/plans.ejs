@@ -1,0 +1,7 @@
+<%- include('_top') %>
+<h1>Planos</h1><a class="btn" href="/admin/planos/novo">Novo plano</a>
+<% const cats = { cliente: 'Cliente final', revenda: 'Revenda mensalista', apontamento: 'Apontamento', franquia: 'Franquia' }; Object.keys(cats).forEach(c => { %>
+<h2><%= cats[c] %></h2><div class="tw"><table><tr><th>Ordem</th><th>Nome</th><th>Créditos</th><th>Preço</th><th>Período</th><th>Destaque</th><th>Ativo</th><th></th></tr>
+<% plans.filter(p => p.category === c).forEach(p => { %><tr><td><%= p.sort %></td><td><%= p.name %><br><small>/<%= p.slug %></small></td><td><%= p.credits || '' %></td><td>R$ <%= p.price.toFixed(2).replace('.', ',') %></td><td><%= p.period %></td><td><%= p.highlight ? '★' : '' %></td><td><%= p.active ? 'sim' : 'não' %></td><td><a href="/admin/planos/<%= p.id %>">Editar</a></td></tr><% }) %></table></div><% }) %>
+<p class="m">Planos de revenda ganham página própria em /revenda-iptv/slug. Mudar o slug muda o endereço da página.</p>
+<%- include('_bottom') %>

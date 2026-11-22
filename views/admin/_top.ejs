@@ -1,0 +1,23 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Admin · Cine Pulse</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+:root{--bg:#0d0d0d;--c:#161616;--l:#2b2b2b;--t:#eee;--m:#9a9a9a;--r:#e50914;--o:#ff6a00}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:15px/1.5 system-ui,Segoe UI,Roboto,Arial,sans-serif}
+a{color:var(--o)}header{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:10px 16px;background:#000;border-bottom:2px solid var(--r)}
+header img{height:34px}header nav{display:flex;gap:4px;flex-wrap:wrap}header nav a{color:#ddd;text-decoration:none;padding:6px 10px;border-radius:6px}header nav a:hover{background:#222}
+main{max-width:1200px;margin:0 auto;padding:20px 16px}h1{font-size:1.5rem;margin:0 0 14px}h2{font-size:1.15rem;margin:24px 0 10px;color:#fff}
+.card{background:var(--c);border:1px solid var(--l);border-radius:10px;padding:18px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.stat{background:var(--c);border:1px solid var(--l);border-radius:10px;padding:14px}.stat b{display:block;font-size:1.8rem}.stat span{color:var(--m);font-size:.85rem}
+table{width:100%;border-collapse:collapse;background:var(--c)}th,td{padding:9px 10px;border-bottom:1px solid var(--l);text-align:left;vertical-align:top;font-size:.92rem}th{color:var(--m);font-weight:600}
+.tw{overflow-x:auto;border:1px solid var(--l);border-radius:10px}
+label{display:block;font-weight:600;margin:12px 0 4px;font-size:.9rem}small,.m{color:var(--m)}
+input,select,textarea{width:100%;background:#0a0a0a;border:1px solid #3a3a3a;color:#fff;border-radius:7px;padding:9px 11px;font:inherit}textarea{min-height:90px;font-family:ui-monospace,Consolas,monospace;font-size:.85rem}
+input[type=checkbox]{width:auto}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 16px}
+.btn{display:inline-block;background:linear-gradient(90deg,var(--r),var(--o));color:#fff;border:0;border-radius:7px;padding:9px 16px;font-weight:700;cursor:pointer;text-decoration:none;font-size:.9rem;margin:4px 4px 0 0}
+.btn2{background:#2a2a2a}.btn-del{background:#5a0000}.msg{background:rgba(255,106,0,.15);border:1px solid var(--o);padding:10px 14px;border-radius:8px;margin-bottom:14px;word-break:break-word}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.78rem;background:#2a2a2a}.pill.convertido{background:#0f5132}.pill.aguardando_teste{background:#7a4a00}.pill.teste_enviado{background:#173d6b}.pill.descadastrado{background:#444}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filters input,.filters select{width:auto;flex:1 1 160px}
+</style></head><body>
+<header><a href="/admin"><img src="/img/logo-sm.webp" alt="Cine Pulse"></a>
+<nav><a href="/admin">Início</a><a href="/admin/leads">Leads</a><a href="/admin/planos">Planos</a><a href="/admin/emails">Sequência de e-mails</a><a href="/admin/seo">SEO</a><a href="/admin/configuracoes">Configurações</a><a href="/" target="_blank">Ver site</a><a href="/admin/sair">Sair</a></nav></header>
+<main><% if (msg) { %><div class="msg"><%= msg %></div><% } %>

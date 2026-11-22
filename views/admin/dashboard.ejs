@@ -1,0 +1,15 @@
+<%- include('_top') %>
+<h1>Painel Cine Pulse</h1>
+<div class="stats">
+<div class="stat"><b><%= stats.hoje %></b><span>Leads hoje</span></div><div class="stat"><b><%= stats.total %></b><span>Leads no total</span></div>
+<div class="stat"><b><%= stats.testes %></b><span>Testes pedidos</span></div><div class="stat"><b><%= stats.pendentes %></b><span>Testes aguardando envio</span></div>
+<div class="stat"><b><%= stats.sequencia %></b><span>Na sequência de e-mails</span></div><div class="stat"><b><%= stats.convertidos %></b><span>Convertidos</span></div>
+</div>
+<% if (stats.pendentes) { %><p class="msg">Há <%= stats.pendentes %> teste(s) aguardando envio manual. <a href="/admin/leads?status=aguardando_teste">Ver agora</a></p><% } %>
+<% const pend = []; if (!s.smtp_pass) pend.push('Senha/chave SMTP da Brevo'); if (!s.wa_url || !s.wa_token) pend.push('URL e chave da Evolution API'); if (!s.sigma_url) pend.push('URL do webhook do painel Sigma'); if (!s.trailer_youtube) pend.push('Link do trailer no YouTube'); if (!s.ga4_id && !s.gads_id && !s.gtm_id) pend.push('Tags do Google'); if (!s.meta_pixel_id) pend.push('Pixel da Meta'); %>
+<% if (pend.length) { %><div class="card"><b>Falta configurar:</b> <%= pend.join(' · ') %>. <a href="/admin/configuracoes">Ir para Configurações</a></div><% } %>
+<h2>Últimos leads</h2>
+<div class="tw"><table><tr><th>Data</th><th>Nome</th><th>Tipo</th><th>Origem</th><th>Status</th></tr>
+<% recentes.forEach(l => { %><tr><td><%= l.created_at %></td><td><a href="/admin/leads/<%= l.id %>"><%= l.name %></a></td><td><%= l.type %></td><td><%= l.source %></td><td><span class="pill <%= l.status %>"><%= l.status %></span></td></tr><% }) %></table></div>
+<% if (erros.length) { %><h2>Erros recentes de envio</h2><div class="tw"><table><tr><th>Quando</th><th>Canal</th><th>Tipo</th><th>Erro</th></tr><% erros.forEach(e => { %><tr><td><%= e.created_at %></td><td><%= e.channel %></td><td><%= e.kind %></td><td><%= e.error %></td></tr><% }) %></table></div><% } %>
+<%- include('_bottom') %>

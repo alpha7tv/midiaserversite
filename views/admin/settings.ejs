@@ -1,0 +1,65 @@
+<%- include('_top') %>
+<h1>Configurações</h1>
+<form method="post" action="/admin/configuracoes" autocomplete="off">
+<div class="card"><h2 style="margin-top:0">Site</h2><div class="row">
+<div><label>URL do site</label><input name="site_url" value="<%= s.site_url %>"></div>
+<div><label>WhatsApp (com 55 + DDD)</label><input name="whatsapp_number" value="<%= s.whatsapp_number %>"></div>
+<div><label>E-mail de contato</label><input name="support_email" value="<%= s.support_email %>"></div>
+<div><label>Loja de sites para revendedor</label><input name="sites_revenda_url" value="<%= s.sites_revenda_url %>"></div></div></div>
+
+<div class="card"><h2 style="margin-top:0">Trailer do topo e popup</h2><div class="row">
+<div><label>Link do trailer no YouTube</label><input name="trailer_youtube" value="<%= s.trailer_youtube %>" placeholder="https://www.youtube.com/watch?v=..."><small>Use o trailer oficial publicado pelo estúdio/distribuidora.</small></div>
+<div><label>Título do trailer (acessibilidade)</label><input name="trailer_title" value="<%= s.trailer_title %>"></div></div>
+<label><input type="checkbox" name="popup_enabled" value="1" <%= s.popup_enabled === '1' ? 'checked' : '' %>> Mostrar popup de apontamento ao entrar</label>
+<div class="row"><div><label>Título do popup</label><input name="popup_title" value="<%= s.popup_title %>"></div><div><label>Texto do popup</label><input name="popup_text" value="<%= s.popup_text %>"></div></div></div>
+
+<div class="card"><h2 style="margin-top:0">Rastreamento e anúncios</h2><div class="row">
+<div><label>Google Tag Manager (GTM-XXXX)</label><input name="gtm_id" value="<%= s.gtm_id %>"></div>
+<div><label>Google Analytics 4 (G-XXXX)</label><input name="ga4_id" value="<%= s.ga4_id %>"></div>
+<div><label>Google Ads (AW-XXXX)</label><input name="gads_id" value="<%= s.gads_id %>"></div>
+<div><label>Rótulo conversão: lead/teste</label><input name="gads_label_lead" value="<%= s.gads_label_lead %>"></div>
+<div><label>Rótulo conversão: clique WhatsApp</label><input name="gads_label_whatsapp" value="<%= s.gads_label_whatsapp %>"></div>
+<div><label>Pixel da Meta (ID)</label><input name="meta_pixel_id" value="<%= s.meta_pixel_id %>"></div>
+<div><label>Verificação Search Console (content)</label><input name="google_site_verification" value="<%= s.google_site_verification %>"></div></div>
+<label>Código extra no &lt;head&gt; (opcional)</label><textarea name="extra_head"><%= s.extra_head %></textarea>
+<small>Tags só disparam depois do aceite de cookies (Consent Mode v2 / LGPD). Eventos enviados: whatsapp_click, form_submit, generate_lead, popup_view; Meta: PageView, Contact, Lead.</small></div>
+
+<div class="card"><h2 style="margin-top:0">E-mail (SMTP Brevo)</h2><div class="row">
+<div><label>Servidor SMTP</label><input name="smtp_host" value="<%= s.smtp_host %>"></div>
+<div><label>Porta</label><input name="smtp_port" value="<%= s.smtp_port %>"></div>
+<div><label>Login SMTP</label><input name="smtp_user" value="<%= s.smtp_user %>"></div>
+<div><label>Senha / chave SMTP <%= s.smtp_pass ? '(salva)' : '(não configurada)' %></label><input name="smtp_pass" type="password" placeholder="deixe vazio para manter"></div>
+<div><label>Remetente</label><input name="mail_from" value="<%= s.mail_from %>"></div></div>
+<label><input type="checkbox" name="smtp_secure" value="1" <%= s.smtp_secure === '1' ? 'checked' : '' %>> SSL direto (porta 465)</label>
+<div class="row"><div><label>Enviar e-mail de teste para</label><input name="test_email" type="email"></div></div>
+<button class="btn btn2" name="action" value="testar_email">Salvar e testar e-mail</button></div>
+
+<div class="card"><h2 style="margin-top:0">WhatsApp automático</h2><div class="row">
+<div><label>Provedor</label><select name="wa_provider"><% [['off','Desligado'],['evolution','Evolution API'],['zapi','Z-API'],['custom','Outro (POST JSON)']].forEach(o => { %><option value="<%= o[0] %>" <%= s.wa_provider === o[0] ? 'selected' : '' %>><%= o[1] %></option><% }) %></select></div>
+<div><label>URL base da API</label><input name="wa_url" value="<%= s.wa_url %>" placeholder="https://evolution.seudominio.com"></div>
+<div><label>Instância</label><input name="wa_instance" value="<%= s.wa_instance %>"></div>
+<div><label>API key / token <%= s.wa_token ? '(salvo)' : '(não configurado)' %></label><input name="wa_token" type="password" placeholder="deixe vazio para manter"></div>
+<div><label>Client-Token (só Z-API)</label><input name="wa_client_token" type="password" placeholder="deixe vazio para manter"></div></div>
+<div class="row"><div><label>Enviar WhatsApp de teste para</label><input name="test_whatsapp" placeholder="5567999999999"></div></div>
+<button class="btn btn2" name="action" value="testar_whatsapp">Salvar e testar WhatsApp</button></div>
+
+<div class="card"><h2 style="margin-top:0">Teste automático (painel Sigma)</h2>
+<label><input type="checkbox" name="sigma_enabled" value="1" <%= s.sigma_enabled === '1' ? 'checked' : '' %>> Gerar teste automaticamente</label>
+<div class="row"><div><label>URL do webhook</label><input name="sigma_url" value="<%= s.sigma_url %>"></div><div><label>Método</label><select name="sigma_method"><% ['POST','GET'].forEach(x => { %><option <%= s.sigma_method === x ? 'selected' : '' %>><%= x %></option><% }) %></select></div></div>
+<label>Headers (JSON)</label><textarea name="sigma_headers" rows="2"><%= s.sigma_headers %></textarea>
+<label>Corpo da requisição (JSON; variáveis {{nome}} {{email}} {{whatsapp}})</label><textarea name="sigma_body" rows="4"><%= s.sigma_body %></textarea>
+<div class="row"><div><label>Caminho da mensagem na resposta</label><input name="sigma_path_message" value="<%= s.sigma_path_message %>"></div><div><label>Caminho do usuário</label><input name="sigma_path_user" value="<%= s.sigma_path_user %>"></div><div><label>Caminho da senha</label><input name="sigma_path_pass" value="<%= s.sigma_path_pass %>"></div></div>
+<small>Se usuário/senha não vierem em campos próprios, o sistema procura "Usuário:" e "Senha:" no texto da mensagem e também envia a mensagem completa ao cliente.</small><br>
+<button class="btn btn2" name="action" value="testar_painel">Salvar e testar painel (gera 1 teste)</button>
+<label>Assunto do e-mail com o teste</label><input name="test_email_subject" value="<%= s.test_email_subject %>">
+<label>Mensagem com os dados do teste ({{nome}} {{dados}} = mensagem do painel ou usuário/senha; também {{usuario}} {{senha}} {{info}})</label><textarea name="test_message" rows="6"><%= s.test_message %></textarea>
+<label>Mensagem quando o teste precisa de envio manual</label><textarea name="test_pending_message" rows="3"><%= s.test_pending_message %></textarea></div>
+
+<div class="card"><h2 style="margin-top:0">Sequência e segurança</h2><div class="row">
+<div><label>Enviar a partir de (hora)</label><input name="seq_send_hour_start" value="<%= s.seq_send_hour_start %>"></div>
+<div><label>Enviar até (hora)</label><input name="seq_send_hour_end" value="<%= s.seq_send_hour_end %>"></div>
+<div><label>Nova senha do admin (10+ caracteres)</label><input name="new_password" type="password" autocomplete="new-password"></div></div>
+<button class="btn btn2" name="action" value="rodar_sequencia">Salvar e processar fila agora</button></div>
+<button class="btn" style="font-size:1rem;padding:12px 24px">Salvar configurações</button>
+</form>
+<%- include('_bottom') %>

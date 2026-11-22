@@ -1,0 +1,7 @@
+<%- include('_top') %>
+<h1>Sequência de e-mails</h1>
+<p class="m">Um e-mail por dia para quem pediu teste e não fechou, começando 24h após o teste e enviado entre <%= s.seq_send_hour_start %>h e <%= s.seq_send_hour_end %>h (horário de Brasília). "Todos" vai para clientes e revendedores; "cliente" e "revenda" substituem o "todos" no mesmo dia para aquele público. Se o dia tiver texto de WhatsApp, ele também é enviado.</p>
+<a class="btn" href="/admin/emails/novo">Novo e-mail</a>
+<div class="tw" style="margin-top:12px"><table><tr><th>Dia</th><th>Público</th><th>Assunto</th><th>WhatsApp</th><th>Ativo</th><th></th></tr>
+<% emails.forEach(e => { %><tr><td><%= e.day %></td><td><%= e.audience %></td><td><%= e.subject %></td><td><%= e.whatsapp ? 'sim' : '' %></td><td><%= e.active ? 'sim' : 'não' %></td><td><a href="/admin/emails/<%= e.id %>">Editar</a> · <a href="/admin/emails/<%= e.id %>/preview" target="_blank">Ver</a></td></tr><% }) %></table></div>
+<%- include('_bottom') %>

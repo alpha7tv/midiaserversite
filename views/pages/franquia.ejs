@@ -1,0 +1,36 @@
+<%- include('../partials/head') %>
+<% const f = plansBy('franquia')[0]; %>
+<section class="page-hero"><div class="wrap split">
+  <div>
+    <span class="badge">Marca própria</span>
+    <h1><%= seo.h1 %></h1>
+    <p class="lead">Tenha o seu próprio serviço de streaming com painel, DNS e aplicativo personalizados, licença para aplicativos em Smart TV LG e Samsung e créditos ilimitados.</p>
+    <div class="ctas"><a class="btn" href="<%= wa() %>" target="_blank" rel="noopener" data-track="whatsapp">Quero minha franquia</a></div>
+  </div>
+  <div><% if (f) { %><%- include('../partials/plan-card', { p: f, link: null }) %><% } %></div>
+</div></section>
+<section class="sec"><div class="wrap">
+  <div class="grid">
+    <div class="card feat"><div class="ico">🎛️</div><h3>Painel personalizado</h3><p>Painel de gestão com a sua marca para cadastrar e renovar clientes.</p></div>
+    <div class="card feat"><div class="ico">🌐</div><h3>DNS exclusiva</h3><p>DNS própria no nosso sistema novo e integrado.</p></div>
+    <div class="card feat"><div class="ico">📱</div><h3>Aplicativo personalizado</h3><p>Seu cliente usa um aplicativo com a sua identidade.</p></div>
+    <div class="card feat"><div class="ico">📺</div><h3>Smart TV LG e Samsung</h3><p>Licença para aplicativos personalizados nas Smart TVs LG e Samsung.</p></div>
+    <div class="card feat"><div class="ico">♾️</div><h3>Créditos ilimitados</h3><p>Ative quantos clientes quiser, sem controlar saldo.</p></div>
+    <div class="card feat"><div class="ico">🤝</div><h3>Direto com o dono</h3><p>Suporte 24 horas e decisões sem intermediário.</p></div>
+  </div>
+</div></section>
+<section class="sec sec-alt"><div class="wrap prose">
+  <h2>Para quem é a franquia IPTV Cine Pulse</h2>
+  <p>A franquia é para quem quer deixar de ser apenas revendedor e construir uma marca. Com aplicativo e painel personalizados, o seu cliente reconhece a sua empresa, e não a de um fornecedor. Isso aumenta a confiança e a fidelização.</p>
+  <h2>Franquia ou painel ilimitado?</h2>
+  <p>O <a href="/revenda-iptv/painel-ilimitado">painel ilimitado</a> oferece créditos sem limite. A franquia inclui créditos ilimitados e ainda soma marca própria, aplicativo personalizado e licença para Smart TV LG e Samsung.</p>
+  <h2>Quer um site para a sua marca?</h2>
+  <p>Também criamos sites profissionais. <a href="<%= s.sites_revenda_url %>" target="_blank" rel="noopener">Veja os modelos</a>.</p>
+</div></section>
+<%- include('../partials/faq', { faqs: [
+  ['Quanto custa a franquia?', f ? brl(f.price) + ' ' + f.period + '.' : 'Consulte pelo WhatsApp.'],
+  ['O aplicativo tem a minha marca?', 'Sim. O aplicativo é personalizado e inclui licença para Smart TV LG e Samsung.'],
+  ['Tenho limite de clientes?', 'Não. Os créditos da franquia são ilimitados.'],
+] }) %>
+<%- include('../partials/cta', { ctaTitle: 'Monte a sua marca de streaming', ctaText: 'Fale com o dono e tire suas dúvidas sobre a franquia.', ctaLink: '/contato', ctaLinkText: 'Enviar mensagem' }) %>
+<%- include('../partials/footer') %>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= seo.title %></title>
+<% if (seo.description) { %><meta name="description" content="<%= seo.description %>"><% } %>
+<% if (noindex) { %><meta name="robots" content="noindex, follow"><% } else { %><meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" href="<%= canonical %>"><% } %>
+<meta name="theme-color" content="#0b0b0b">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cine Pulse">
+<meta property="og:title" content="<%= seo.title %>">
+<meta property="og:description" content="<%= seo.description %>">
+<meta property="og:url" content="<%= canonical %>">
+<meta property="og:image" content="<%= base %>/img/og-cinepulse.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= seo.title %>">
+<meta name="twitter:description" content="<%= seo.description %>">
+<meta name="twitter:image" content="<%= base %>/img/og-cinepulse.jpg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/icon-32.png">
+<link rel="apple-touch-icon" href="/img/icon-180.png">
+<link rel="manifest" href="/site.webmanifest">
+<% if (s.google_site_verification) { %><meta name="google-site-verification" content="<%= s.google_site_verification %>"><% } %>
+<link rel="preload" as="image" href="/img/logo-sm.webp" type="image/webp">
+<link rel="stylesheet" href="/css/style.css?v=1">
+<%
+  const ld = [{ '@context': 'https://schema.org', '@type': 'Organization', name: 'Cine Pulse', url: base + '/', logo: base + '/img/logo.png',
+    contactPoint: s.whatsapp_number ? [{ '@type': 'ContactPoint', telephone: '+' + s.whatsapp_number, contactType: 'customer service', availableLanguage: 'Portuguese', hoursAvailable: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], opens: '00:00', closes: '23:59' } }] : undefined }];
+  if (pagePath === '/') ld.push({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Cine Pulse', url: base + '/', inLanguage: 'pt-BR' });
+  if (breadcrumbs) ld.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [['Início', '/'], ...breadcrumbs].map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b[0], item: base + (b[1] === '/' ? '/' : b[1]) })) });
+%>
+<script type="application/ld+json"><%- JSON.stringify(ld).replace(/</g, '\\u003c') %></script>
+<script>
+window.CP={ga4:<%- JSON.stringify(s.ga4_id||'') %>,gads:<%- JSON.stringify(s.gads_id||'') %>,gadsLead:<%- JSON.stringify(s.gads_label_lead||'') %>,gadsWa:<%- JSON.stringify(s.gads_label_whatsapp||'') %>,pixel:<%- JSON.stringify(s.meta_pixel_id||'') %>};
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});
+try{if(localStorage.getItem('cp_consent')==='granted')gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});}catch(e){}
+</script>
+<% if (s.gtm_id) { %><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',<%- JSON.stringify(s.gtm_id) %>);</script><% } %>
+<% if (s.ga4_id || s.gads_id) { %><script async src="https://www.googletagmanager.com/gtag/js?id=<%= s.ga4_id || s.gads_id %>"></script>
+<script>gtag('js',new Date());<% if (s.ga4_id) { %>gtag('config',<%- JSON.stringify(s.ga4_id) %>);<% } %><% if (s.gads_id) { %>gtag('config',<%- JSON.stringify(s.gads_id) %>);<% } %></script><% } %>
+<% if (s.meta_pixel_id) { %><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+try{if(localStorage.getItem('cp_consent')!=='granted')fbq('consent','revoke');}catch(e){fbq('consent','revoke');}
+fbq('init',<%- JSON.stringify(s.meta_pixel_id) %>);fbq('track','PageView');</script><% } %>
+<%- s.extra_head || '' %>
+</head>
+<body>
+<% if (s.gtm_id) { %><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= s.gtm_id %>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><% } %>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<header class="topbar" id="topo">
+  <div class="wrap topbar-in">
+    <a href="/" class="brand" aria-label="Cine Pulse - página inicial"><img src="/img/logo-sm.webp" width="200" height="51" alt="Cine Pulse - Streaming de qualidade"></a>
+    <button class="menu-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">☰</button>
+    <nav id="menu" class="menu" aria-label="Principal">
+      <a href="/planos">Assinar</a>
+      <div class="dd"><a href="/revenda-iptv">Revenda IPTV</a>
+        <div class="dd-menu"><% plansBy('revenda').forEach(p => { %><a href="/revenda-iptv/<%= p.slug %>"><%= p.name %></a><% }) %></div></div>
+      <a href="/apontamento-iptv">Apontamento</a>
+      <a href="/franquia-iptv">Franquia</a>
+      <a href="/dispositivos">Aparelhos</a>
+      <a href="/contato">Contato</a>
+      <a href="/teste-gratis" class="btn btn-sm">Teste grátis</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<% if (breadcrumbs) { %><nav class="wrap crumbs" aria-label="Trilha"><a href="/">Início</a><% breadcrumbs.forEach((b, i) => { %> › <% if (i < breadcrumbs.length - 1) { %><a href="<%= b[1] %>"><%= b[0] %></a><% } else { %><span aria-current="page"><%= b[0] %></span><% } }) %></nav><% } %>

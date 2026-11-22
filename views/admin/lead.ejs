@@ -1,0 +1,25 @@
+<%- include('_top') %>
+<h1>Lead #<%= lead.id %> · <%= lead.name %></h1>
+<form method="post" class="card">
+<div class="row">
+<div><label>Nome</label><input name="name" value="<%= lead.name %>"></div>
+<div><label>E-mail</label><input name="email" value="<%= lead.email || '' %>"></div>
+<div><label>WhatsApp</label><input name="whatsapp" value="<%= lead.whatsapp || '' %>"></div>
+<div><label>Tipo</label><select name="type"><% ['cliente','revenda','apontamento','franquia','provedor','site'].forEach(x => { %><option <%= lead.type === x ? 'selected' : '' %>><%= x %></option><% }) %></select></div>
+<div><label>Status</label><select name="status"><% ['novo','aguardando_teste','teste_enviado','convertido','descadastrado'].forEach(x => { %><option <%= lead.status === x ? 'selected' : '' %>><%= x %></option><% }) %></select><small>Marque "convertido" quando o cliente fechar: a sequência para.</small></div>
+</div>
+<h2>Dados do teste</h2>
+<div class="row"><div><label>Usuário</label><input name="test_user" value="<%= lead.test_user || '' %>"></div><div><label>Senha</label><input name="test_pass" value="<%= lead.test_pass || '' %>"></div></div>
+<label>Informações extras (mensagem do painel, URL, validade)</label><textarea name="test_info"><%= lead.test_info || '' %></textarea>
+<label>Anotações internas</label><textarea name="notes"><%= lead.notes || '' %></textarea>
+<% if (lead.message) { %><label>Mensagem do contato</label><div class="card"><%= lead.message %></div><% } %>
+<p class="m">Origem: <%= lead.source %> · Criado: <%= lead.created_at %> · Teste enviado: <%= lead.test_sent_at || '-' %> · Sequência: dia <%= lead.seq_day %> <%= lead.seq_active ? '(ativa, próximo ' + lead.seq_next_at + ' UTC)' : '(parada)' %> · Consentimento: <%= lead.consent ? 'sim' : 'não' %> · UTM: <%= lead.utm %></p>
+<button class="btn" name="action" value="salvar">Salvar</button>
+<button class="btn btn2" name="action" value="gerar_teste">Gerar teste no painel e enviar</button>
+<button class="btn btn2" name="action" value="enviar_teste">Enviar dados acima (e-mail + WhatsApp)</button>
+<% if (lead.seq_active) { %><button class="btn btn2" name="action" value="pausar">Pausar sequência</button><% } else { %><button class="btn btn2" name="action" value="retomar">Retomar sequência</button><% } %>
+<button class="btn btn-del" name="action" value="excluir" onclick="return confirm('Excluir este lead?')">Excluir</button>
+</form>
+<h2>Histórico de envios</h2>
+<div class="tw"><table><tr><th>Quando (UTC)</th><th>Canal</th><th>Tipo</th><th>Status</th><th>Erro</th></tr><% logs.forEach(g => { %><tr><td><%= g.created_at %></td><td><%= g.channel %></td><td><%= g.kind %></td><td><%= g.status %></td><td><%= g.error || '' %></td></tr><% }) %></table></div>
+<%- include('_bottom') %>

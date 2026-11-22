@@ -1,0 +1,37 @@
+<%- include('../partials/head') %>
+<% const all = plansBy('revenda'); const idx = all.findIndex(x => x.id === plan.id); const unl = !/^\d+$/.test(plan.credits || ''); const custo = unl ? null : plan.price / Number(plan.credits); %>
+<section class="page-hero"><div class="wrap split">
+  <div>
+    <span class="badge">Revenda IPTV · Painel mensalista</span>
+    <h1><%= seo.h1 %></h1>
+    <p class="lead"><%= plan.short %> Indicado para <%= plan.audience || 'revendedores' %>.</p>
+    <div class="ctas"><a class="btn" href="<%= wa() %>" target="_blank" rel="noopener" data-track="whatsapp">Contratar por <%= brl(plan.price) %>/mês</a><a class="btn btn-ghost" href="/revenda-iptv">Comparar planos</a></div>
+  </div>
+  <div><%- include('../partials/plan-card', { p: plan, link: null }) %></div>
+</div></section>
+<section class="sec"><div class="wrap prose">
+  <h2>O que você recebe no <%= plan.name %></h2>
+  <ul><% (plan.features || '').split('\n').filter(Boolean).forEach(f => { %><li><%= f %></li><% }) %></ul>
+  <% if (custo) { %>
+  <h2>Quanto custa cada crédito</h2>
+  <p>Neste plano você paga <%= brl(plan.price) %> por mês por <%= plan.credits %> créditos, o que dá <strong><%= brl(custo) %> por crédito</strong>. Como os créditos são acumulativos, o que não for usado no mês continua no seu saldo.</p>
+  <% } else { %>
+  <h2>Por que escolher créditos ilimitados</h2>
+  <p>Com o painel ilimitado você ativa e renova clientes sem acompanhar saldo. É a escolha de operações grandes, com equipe ou sub-revendedores. Se você também quer marca e aplicativo próprios, compare com a <a href="/franquia-iptv">franquia</a>.</p>
+  <% } %>
+  <h2>Para quem é este plano</h2>
+  <p>O <%= plan.name %> é indicado para <%= plan.audience || 'revendedores' %>. Se você ainda está em dúvida sobre a quantidade de créditos, fale com o dono pelo WhatsApp e receba uma recomendação de acordo com a sua carteira.</p>
+  <h2>Direto com o dono, suporte 24 horas e DNS exclusiva</h2>
+  <p>Todo revendedor Cine Pulse trata diretamente com o dono, tem suporte 24 horas e recebe, de imediato, uma DNS exclusiva no nosso sistema novo e integrado, pensado para evitar os problemas de DNS que tantos revendedores enfrentam.</p>
+  <p>
+    <% if (idx > 0) { %>Plano menor: <a href="/revenda-iptv/<%= all[idx-1].slug %>"><%= all[idx-1].name %></a>. <% } %>
+    <% if (idx < all.length - 1) { %>Plano maior: <a href="/revenda-iptv/<%= all[idx+1].slug %>"><%= all[idx+1].name %></a>.<% } %>
+  </p>
+</div></section>
+<%- include('../partials/faq', { faqs: [
+  ['Os créditos vencem?', unl ? 'No plano ilimitado não há contagem de créditos.' : 'Não. Os créditos são acumulativos e continuam no seu saldo de um mês para o outro.'],
+  ['Quando recebo minha DNS exclusiva?', 'Imediatamente após a contratação de qualquer plano.'],
+  ['Como contrato o ' + plan.name + '?', 'Toque em "Contratar" e fale com o dono pelo WhatsApp. Ele envia a forma de pagamento e libera o painel.'],
+] }) %>
+<%- include('../partials/cta', { ctaTitle: 'Garanta o ' + plan.name, ctaText: brl(plan.price) + ' ' + plan.period + ', direto com o dono e com DNS exclusiva.', ctaLink: '/revenda-iptv', ctaLinkText: 'Ver outros planos' }) %>
+<%- include('../partials/footer') %>

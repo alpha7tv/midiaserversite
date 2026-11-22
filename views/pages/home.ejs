@@ -1,0 +1,80 @@
+<%- include('../partials/head') %>
+<%
+  let yt = (s.trailer_youtube || '').trim(); const m = yt.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/); if (m) yt = m[1]; if (!/^[\w-]{11}$/.test(yt)) yt = '';
+%>
+<section class="hero">
+  <div class="hero-fallback"></div>
+  <% if (yt) { %><div class="hero-media"><iframe id="trailer" title="<%= s.trailer_title %>" src="https://www.youtube-nocookie.com/embed/<%= yt %>?autoplay=1&mute=1&loop=1&playlist=<%= yt %>&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1" allow="autoplay; encrypted-media; picture-in-picture" loading="eager"></iframe></div>
+  <button class="sound-btn" data-muted="1" aria-label="Ativar som">🔇</button><% } %>
+  <div class="hero-in">
+    <span class="badge">Streaming de qualidade</span>
+    <h1><%= seo.h1 %></h1>
+    <p class="lead">Assista na Smart TV, TV Box, celular ou computador com suporte 24 horas. E se você quer empreender, a revenda IPTV Cine Pulse tem painel com créditos acumulativos e DNS exclusiva.</p>
+    <div class="ctas">
+      <a class="btn" href="/planos">Assinar a partir de R$ 19,90</a>
+      <a class="btn btn-ghost" href="/revenda-iptv">Seja um revendedor</a>
+    </div>
+    <p class="hero-note"><a href="/teste-gratis" style="color:#fff">Faça um teste grátis</a> antes de decidir.<% if (yt) { %> Trailer exibido via YouTube; o vídeo pertence aos seus titulares.<% } %></p>
+  </div>
+</section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-head"><h2>Escolha o seu caminho</h2><p>Duas formas de ter a Cine Pulse: para assistir em casa ou para montar o seu negócio.</p></div>
+  <div class="paths">
+    <div class="path"><span class="kicker">Para você e sua família</span><h3>Assinatura IPTV Cine Pulse</h3><p>Planos mensal, trimestral, semestral e anual. Sem taxa de instalação e com ajuda para configurar no seu aparelho.</p><a class="btn" href="/planos">Ver planos de assinatura</a></div>
+    <div class="path"><span class="kicker">Para empreender</span><h3>Revenda IPTV, apontamento e franquia</h3><p>Painel mensalista de 10 créditos a ilimitado, apontamento para o seu painel Sigma e franquia com a sua marca.</p><a class="btn" href="/revenda-iptv">Quero revender</a></div>
+  </div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap">
+  <h2 style="font-size:1.4rem">Tudo em um só lugar</h2>
+  <div class="row" role="list">
+    <% [['Filmes','#7a0b10','#e50914'],['Séries','#3b0d0d','#ff6a00'],['Canais ao vivo','#1a1a1a','#e50914'],['Infantil','#5a1e00','#ff8c3a'],['Documentários','#1e1e1e','#b20710'],['Sob demanda','#2b0505','#ff6a00']].forEach(t => { %>
+      <div class="tile" role="listitem" style="background:linear-gradient(135deg,<%= t[1] %>,<%= t[2] %>)"><span><%= t[0] %></span></div>
+    <% }) %>
+  </div>
+  <p style="color:var(--mut);font-size:.85rem;margin-top:8px">A grade disponível pode variar. Consulte nosso suporte antes de contratar.</p>
+</div></section>
+
+<section class="sec sec-alt"><div class="wrap">
+  <div class="sec-head"><span class="kicker">Assinatura</span><h2>Planos de assinatura IPTV</h2><p>Preço fixo, sem fidelidade e suporte 24 horas em todos os planos.</p></div>
+  <div class="grid"><% plansBy('cliente').forEach(p => { %><%- include('../partials/plan-card', { p, link: null }) %><% }) %></div>
+  <p style="margin-top:20px"><a href="/planos">Comparar planos em detalhe</a> · <a href="/dispositivos">Ver aparelhos compatíveis</a></p>
+</div></section>
+
+<section class="sec"><div class="wrap split">
+  <div>
+    <span class="kicker">Revenda IPTV</span>
+    <h2>Aqui o revendedor trata direto com o dono</h2>
+    <p>Muita gente tem medo de pegar revenda e ficar sem suporte quando o fornecedor some. Na Cine Pulse você negocia e é atendido diretamente pelo dono, com suporte 24 horas.</p>
+    <p>E chega de dor de cabeça com DNS: usamos um sistema novo e integrado, e <strong>ao assinar qualquer plano você ganha de imediato uma DNS exclusiva</strong>.</p>
+    <div class="ctas"><a class="btn" href="/revenda-iptv">Ver planos de revenda</a><a class="btn btn-ghost" href="<%= wa('Olá! Quero falar com o dono sobre a revenda Cine Pulse.') %>" target="_blank" rel="noopener" data-track="whatsapp">Falar com o dono</a></div>
+  </div>
+  <div class="box"><%- include('../partials/trust') %></div>
+</div></section>
+
+<section class="sec sec-alt"><div class="wrap">
+  <div class="sec-head"><span class="kicker">Painel mensalista</span><h2>Painel IPTV por créditos acumulativos</h2><p>Créditos que você não usa no mês continuam no seu saldo. Comece com 10 créditos por R$ 50,00 mensais.</p></div>
+  <div class="grid"><% plansBy('revenda').slice(0, 4).forEach(p => { %><%- include('../partials/plan-card', { p, link: '/revenda-iptv/' + p.slug }) %><% }) %></div>
+  <p style="margin-top:20px"><a href="/revenda-iptv">Ver todos os planos, até o ilimitado</a></p>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-head"><h2>Soluções para quem já tem carteira</h2></div>
+  <div class="grid">
+    <div class="card feat"><div class="ico">🔗</div><h3>Apontamento IPTV</h3><p>Já tem painel Sigma? Aponte o servidor Cine Pulse para ele a partir de R$ 250,00 por mês.</p><a href="/apontamento-iptv">Conhecer o apontamento</a></div>
+    <div class="card feat"><div class="ico">👑</div><h3>Franquia IPTV</h3><p>Painel, DNS e aplicativo com a sua marca, licença para apps em Smart TV LG e Samsung e créditos ilimitados.</p><a href="/franquia-iptv">Conhecer a franquia</a></div>
+    <div class="card feat"><div class="ico">🏗️</div><h3>Servidor próprio</h3><p>Para quem tem uma ampla carteira e quer ser independente, montamos o seu servidor.</p><a href="/iptv-para-provedores">Ver soluções para provedores</a></div>
+    <div class="card feat"><div class="ico">🌐</div><h3>Site para revendedor</h3><p>Já revende? Tenha um site profissional para a sua revenda. Veja os modelos disponíveis.</p><a href="<%= s.sites_revenda_url %>" target="_blank" rel="noopener">Ver modelos de site</a></div>
+  </div>
+</div></section>
+
+<%- include('../partials/faq', { faqs: [
+  ['O que é a Cine Pulse?', 'A Cine Pulse é um serviço de streaming por IPTV para assistir pela internet, com suporte 24 horas, e também oferece planos para revendedores, apontamento e franquia.'],
+  ['Em quais aparelhos funciona?', 'Smart TV, TV Box, Fire TV Stick, celular Android e iPhone e computador. Veja a <a href="/dispositivos">lista de aparelhos</a> ou confirme o seu modelo com o suporte.'],
+  ['Posso testar antes de pagar?', 'Sim. Peça o <a href="/teste-gratis">teste grátis</a> informando e-mail e WhatsApp e receba os dados de acesso.'],
+  ['Quanto custa?', 'Para assistir, a partir de R$ 19,90 por mês. Para revender, painel a partir de R$ 50,00 por mês com 10 créditos.'],
+  ['Como funciona a DNS exclusiva para revendedores?', 'Ao contratar qualquer plano de revenda, apontamento ou franquia você recebe uma DNS exclusiva, configurada no nosso sistema integrado.'],
+] }) %>
+<%- include('../partials/cta', { ctaTitle: 'Pronto para começar?', ctaText: 'Fale agora com a Cine Pulse ou peça o seu teste grátis.', ctaLink: '/teste-gratis', ctaLinkText: 'Pedir teste grátis' }) %>
+<%- include('../partials/footer') %>

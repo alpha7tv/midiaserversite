@@ -1,0 +1,22 @@
+<%- include('../partials/head') %>
+<section class="page-hero"><div class="wrap split">
+  <div>
+    <h1><%= seo.h1 %></h1>
+    <p class="lead">Suporte 24 horas para clientes e revendedores. O jeito mais rápido é pelo WhatsApp, e você fala direto com o dono.</p>
+    <div class="ctas"><a class="btn btn-wa" href="<%= wa() %>" target="_blank" rel="noopener" data-track="whatsapp">Chamar no WhatsApp</a></div>
+    <% if (s.support_email) { %><p style="margin-top:18px">E-mail: <a href="mailto:<%= s.support_email %>"><%= s.support_email %></a></p><% } %>
+  </div>
+  <form class="box" method="post" action="/contato" data-utm="contato" novalidate>
+    <% if (erro) { %><div class="err" role="alert"><%= erro %></div><% } %>
+    <div class="f"><label for="n">Nome</label><input id="n" name="name" required autocomplete="name" value="<%= form.name || '' %>"></div>
+    <div class="f"><label for="e">E-mail</label><input id="e" name="email" type="email" autocomplete="email" value="<%= form.email || '' %>"></div>
+    <div class="f"><label for="w">WhatsApp</label><input id="w" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel" value="<%= form.whatsapp || '' %>"></div>
+    <div class="f"><label for="i">Assunto</label><select id="i" name="interesse">
+      <% [['cliente','Assinar para assistir'],['revenda','Revenda / painel mensalista'],['apontamento','Apontamento para painel Sigma'],['franquia','Franquia'],['provedor','Provedor / servidor próprio'],['site','Site para revendedor']].forEach(o => { %><option value="<%= o[0] %>" <%= form.interesse === o[0] ? 'selected' : '' %>><%= o[1] %></option><% }) %></select></div>
+    <div class="f"><label for="m">Mensagem</label><textarea id="m" name="message" rows="4"><%= form.message || '' %></textarea></div>
+    <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="f"><label class="check"><input type="checkbox" name="consent" value="1"> <span>Aceito receber novidades e ofertas da Cine Pulse.</span></label></div>
+    <button class="btn" type="submit" style="width:100%">Enviar mensagem</button>
+  </form>
+</div></section>
+<%- include('../partials/footer') %>

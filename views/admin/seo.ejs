@@ -1,0 +1,16 @@
+<%- include('_top') %>
+<h1>SEO por página</h1>
+<p class="m">Title até ~60 caracteres e description até ~155. Uma palavra-chave principal por página. As páginas dos planos de revenda geram SEO automático; para personalizar, adicione o caminho (ex.: /revenda-iptv/painel-10-creditos) no formulário abaixo.</p>
+<% pages.forEach(p => { %>
+<form method="post" action="/admin/seo" class="card"><input type="hidden" name="path" value="<%= p.path %>"><b><a href="<%= p.path %>" target="_blank"><%= p.path %></a></b>
+<label>Title <small>(<%= (p.title || '').length %> caracteres)</small></label><input name="title" value="<%= p.title %>">
+<label>Meta description <small>(<%= (p.description || '').length %> caracteres)</small></label><textarea name="description" rows="2"><%= p.description %></textarea>
+<div class="row"><div><label>H1</label><input name="h1" value="<%= p.h1 %>"></div><div><label>Palavras-chave alvo (referência interna, não vai para meta keywords)</label><input name="keywords" value="<%= p.keywords %>"></div></div>
+<label>Mensagem pré-preenchida do WhatsApp nesta página</label><input name="wa" value="<%= p.wa %>">
+<button class="btn">Salvar</button></form>
+<% }) %>
+<form method="post" action="/admin/seo" class="card"><b>Adicionar página</b>
+<div class="row"><div><label>Caminho</label><input name="path" placeholder="/revenda-iptv/painel-10-creditos"></div><div><label>H1</label><input name="h1"></div></div>
+<label>Title</label><input name="title"><label>Description</label><textarea name="description" rows="2"></textarea><label>Palavras-chave</label><input name="keywords"><label>WhatsApp</label><input name="wa">
+<button class="btn">Adicionar</button></form>
+<%- include('_bottom') %>

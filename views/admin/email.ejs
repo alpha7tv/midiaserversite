@@ -1,0 +1,17 @@
+<%- include('_top') %>
+<h1>E-mail do dia <%= email.day %></h1>
+<form method="post" action="/admin/emails/<%= email.id %>" class="card">
+<div class="row"><div><label>Dia</label><input type="number" name="day" value="<%= email.day %>"></div>
+<div><label>Público</label><select name="audience"><% ['todos','cliente','revenda'].forEach(a => { %><option <%= email.audience === a ? 'selected' : '' %>><%= a %></option><% }) %></select></div></div>
+<label>Assunto</label><input name="subject" value="<%= email.subject %>">
+<label>Corpo (HTML). Variáveis: {{nome}} {{whatsapp}} {{planos}} {{revenda}} {{apontamento}} {{franquia}} {{teste}} {{sites_revenda}} {{site}}</label>
+<textarea name="body" rows="16"><%= email.body %></textarea>
+<label>Mensagem de WhatsApp neste dia (opcional, texto puro)</label><textarea name="whatsapp" rows="4"><%= email.whatsapp || '' %></textarea>
+<label><input type="checkbox" name="active" value="1" <%= email.active ? 'checked' : '' %>> Ativo</label>
+<button class="btn">Salvar</button>
+<% if (email.id !== 'novo') { %><a class="btn btn2" href="/admin/emails/<%= email.id %>/preview" target="_blank">Pré-visualizar</a><% } %>
+<div class="row" style="margin-top:10px"><div><label>Enviar teste para</label><input name="test_to" type="email" placeholder="seu@email.com"></div></div>
+<button class="btn btn2" name="action" value="testar">Salvar e enviar teste</button>
+<% if (email.id !== 'novo') { %><button class="btn btn-del" name="action" value="excluir" onclick="return confirm('Excluir este e-mail?')">Excluir</button><% } %>
+</form>
+<%- include('_bottom') %>

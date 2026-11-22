@@ -1,0 +1,27 @@
+<%- include('../partials/head') %>
+<section class="page-hero"><div class="wrap split">
+  <div>
+    <span class="badge">Grátis</span>
+    <h1><%= seo.h1 %></h1>
+    <p class="lead">Informe seu nome, e-mail e WhatsApp. O acesso de teste é enviado automaticamente para o seu WhatsApp e e-mail.</p>
+    <ul class="prose" style="color:#ccc"><li>Sem cartão de crédito</li><li>Funciona em Smart TV, TV Box, celular e computador</li><li>Suporte 24 horas para instalar</li></ul>
+    <p style="color:var(--mut);font-size:.9rem">Um teste por pessoa a cada 30 dias.</p>
+  </div>
+  <form class="box" method="post" action="/teste-gratis" data-utm="teste" novalidate>
+    <% if (erro) { %><div class="err" role="alert"><%= erro %></div><% } %>
+    <div class="f"><label>Quero testar como</label>
+      <div class="seg"><label><input type="radio" name="tipo" value="cliente" <%= tipo === 'cliente' ? 'checked' : '' %>><span>Cliente</span></label><label><input type="radio" name="tipo" value="revenda" <%= tipo === 'revenda' ? 'checked' : '' %>><span>Revendedor</span></label></div></div>
+    <div class="f"><label for="n">Nome</label><input id="n" name="name" required autocomplete="name" value="<%= form.name || '' %>"></div>
+    <div class="f"><label for="e">E-mail</label><input id="e" name="email" type="email" required autocomplete="email" value="<%= form.email || '' %>"></div>
+    <div class="f"><label for="w">WhatsApp com DDD</label><input id="w" name="whatsapp" type="tel" inputmode="numeric" required autocomplete="tel" placeholder="(67) 99999-9999" value="<%= form.whatsapp || '' %>"></div>
+    <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="f"><label class="check"><input type="checkbox" name="consent" value="1" required> <span>Concordo em receber o acesso de teste e mensagens da Cine Pulse por e-mail e WhatsApp, conforme a <a href="/politica-de-privacidade">Política de Privacidade</a>. Posso cancelar quando quiser.</span></label></div>
+    <button class="btn" type="submit" style="width:100%">Receber meu teste grátis</button>
+  </form>
+</div></section>
+<%- include('../partials/faq', { faqs: [
+  ['Em quanto tempo recebo o teste?', 'O envio é automático logo após o cadastro. Se houver qualquer atraso, nossa equipe envia manualmente pelo WhatsApp.'],
+  ['Preciso pagar algo?', 'Não. O teste é grátis e não pede cartão.'],
+  ['Sou revendedor, posso testar?', 'Sim. Escolha "Revendedor" para conhecer a qualidade antes de contratar um painel.'],
+] }) %>
+<%- include('../partials/footer') %>

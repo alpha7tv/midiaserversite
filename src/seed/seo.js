@@ -1,0 +1,85 @@
+// Mapa de palavras-chave -> URL. Cada página tem 1 palavra-chave principal e poucas secundárias,
+// para evitar canibalização e keyword stuffing. Titles/descriptions editáveis no painel (SEO).
+// Volumes de busca: NÃO validados. Preencher após conferir no Keyword Planner / Search Console.
+module.exports = {
+  '/': {
+    title: 'Cine Pulse IPTV | Assinatura e Revenda IPTV com Suporte 24h',
+    description: 'Cine Pulse: assinatura IPTV para sua casa a partir de R$ 19,90 e painel de revenda IPTV com DNS exclusiva, créditos acumulativos e suporte 24h. Teste grátis.',
+    h1: 'Cine Pulse: streaming de qualidade para assistir e para revender',
+    primary: 'cine pulse iptv', secondary: ['serviço iptv', 'iptv de qualidade', 'revenda iptv'],
+    wa: 'Olá! Vim pelo site da Cine Pulse e quero saber mais.',
+  },
+  '/planos': {
+    title: 'Planos IPTV Cine Pulse | Assinatura IPTV a partir de R$ 19,90',
+    description: 'Assinatura IPTV Cine Pulse: plano mensal R$ 19,90, trimestral R$ 45,90, semestral R$ 69,90 e anual R$ 119,90. Suporte 24h e sem taxa de instalação.',
+    h1: 'Planos de assinatura IPTV Cine Pulse',
+    primary: 'assinatura iptv', secondary: ['iptv preço', 'iptv mensalidade', 'iptv plano anual', 'cine pulse planos'],
+    wa: 'Olá! Quero assinar um plano da Cine Pulse.',
+  },
+  '/teste-gratis': {
+    title: 'Teste IPTV Grátis | Cine Pulse',
+    description: 'Peça seu teste grátis da Cine Pulse: informe e-mail e WhatsApp e receba o acesso para conhecer o serviço na sua Smart TV, TV Box ou celular.',
+    h1: 'Teste grátis da Cine Pulse',
+    primary: 'teste iptv grátis', secondary: ['iptv para smart tv', 'iptv com ativação rápida'],
+    wa: 'Olá! Quero fazer o teste grátis da Cine Pulse.',
+  },
+  '/contato': {
+    title: 'Contato Cine Pulse | Suporte IPTV 24 horas',
+    description: 'Fale com a Cine Pulse pelo WhatsApp ou formulário. Suporte 24 horas para clientes e revendedores, direto com o dono.',
+    h1: 'Fale com a Cine Pulse',
+    primary: 'cine pulse suporte', secondary: ['iptv com suporte', 'iptv com atendimento'],
+    wa: 'Olá! Preciso falar com a Cine Pulse.',
+  },
+  '/revenda-iptv': {
+    title: 'Revenda IPTV e Painel Mensalista | Cine Pulse',
+    description: 'Seja revendedor IPTV Cine Pulse: painel mensalista de 10 créditos a ilimitado, créditos acumulativos, DNS exclusiva na hora e suporte 24h direto com o dono.',
+    h1: 'Revenda IPTV Cine Pulse: painel mensalista com créditos acumulativos',
+    primary: 'revenda iptv', secondary: ['revendedor iptv', 'painel iptv mensalista', 'painel iptv por créditos', 'painel iptv'],
+    wa: 'Olá! Quero ser revendedor Cine Pulse.',
+  },
+  '/apontamento-iptv': {
+    title: 'Apontamento IPTV para Painel Sigma | Cine Pulse',
+    description: 'Apontamento IPTV do servidor Cine Pulse para o seu painel Sigma: até 600 ativos por R$ 250, até 3000 por R$ 500 ou sem limite por R$ 650 mensais.',
+    h1: 'Apontamento IPTV do servidor Cine Pulse para o seu painel Sigma',
+    primary: 'apontamento iptv', secondary: ['apontamento de servidor iptv', 'servidor iptv para revenda', 'iptv por ativo'],
+    wa: 'Olá! Tenho interesse no apontamento para o meu painel Sigma.',
+  },
+  '/franquia-iptv': {
+    title: 'Franquia IPTV com Marca Própria | Cine Pulse',
+    description: 'Franquia IPTV Cine Pulse por R$ 650/mês: painel personalizado, DNS exclusiva, aplicativo com sua marca, apps para Smart TV LG e Samsung e créditos ilimitados.',
+    h1: 'Franquia IPTV Cine Pulse com a sua marca',
+    primary: 'franquia iptv', secondary: ['franquia iptv marca própria', 'iptv solução white label', 'painel iptv personalizado'],
+    wa: 'Olá! Quero saber mais sobre a franquia Cine Pulse.',
+  },
+  '/iptv-para-provedores': {
+    title: 'IPTV para Provedores de Internet | Cine Pulse',
+    description: 'Solução Cine Pulse para provedores de internet e empresas: servidor próprio, aplicativo com sua marca e suporte técnico para oferecer streaming como valor agregado.',
+    h1: 'IPTV para provedores de internet e grandes carteiras',
+    primary: 'iptv para provedor de internet', secondary: ['iptv para isp', 'servidor iptv para revenda', 'iptv valor agregado provedor'],
+    wa: 'Olá! Sou provedor / tenho carteira grande e quero uma solução Cine Pulse.',
+  },
+  '/como-funciona-iptv': {
+    title: 'Como Funciona o IPTV? Guia Simples | Cine Pulse',
+    description: 'Entenda como funciona o IPTV, qual internet é necessária, em quais aparelhos funciona e como escolher um serviço ou painel IPTV com suporte.',
+    h1: 'Como funciona o IPTV: guia simples da Cine Pulse',
+    primary: 'como funciona iptv', secondary: ['iptv precisa de internet', 'qual internet precisa para iptv', 'como escolher iptv'],
+    wa: 'Olá! Tenho dúvidas sobre como funciona a Cine Pulse.',
+  },
+  '/dispositivos': {
+    title: 'IPTV para Smart TV, TV Box e Celular | Cine Pulse',
+    description: 'Veja em quais aparelhos a Cine Pulse funciona: Smart TV Samsung e LG, Android TV, TV Box, Fire TV Stick, celular Android e iPhone e computador.',
+    h1: 'Aparelhos compatíveis com a Cine Pulse',
+    primary: 'iptv para smart tv', secondary: ['iptv tv box android', 'iptv para celular', 'iptv como instalar'],
+    wa: 'Olá! Quero saber se a Cine Pulse funciona no meu aparelho.',
+  },
+  '/politica-de-privacidade': {
+    title: 'Política de Privacidade | Cine Pulse',
+    description: 'Como a Cine Pulse coleta, usa e protege seus dados pessoais conforme a LGPD.',
+    h1: 'Política de Privacidade', primary: '', secondary: [], wa: 'Olá! Tenho uma dúvida sobre privacidade.',
+  },
+  '/termos-de-uso': {
+    title: 'Termos de Uso | Cine Pulse',
+    description: 'Condições de uso do site e dos serviços Cine Pulse.',
+    h1: 'Termos de Uso', primary: '', secondary: [], wa: 'Olá! Tenho uma dúvida sobre os termos.',
+  },
+};

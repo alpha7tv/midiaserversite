@@ -1,0 +1,13 @@
+<%- include('../partials/head') %>
+<section class="sec"><div class="wrap prose">
+<h1><%= seo.h1 %></h1>
+<p>Esta política explica como a Cine Pulse trata dados pessoais, conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
+<h2>Dados que coletamos</h2><p>Nome, e-mail e número de WhatsApp informados nos formulários de teste e contato; dados de navegação (páginas visitadas, origem da visita e identificadores de campanha) por meio de cookies, quando você autoriza.</p>
+<h2>Para que usamos</h2><ul><li>Enviar o acesso de teste e responder seu contato;</li><li>Enviar comunicações e ofertas da Cine Pulse por e-mail e WhatsApp, quando você consente;</li><li>Medir o desempenho do site e de anúncios (Google e Meta), quando você aceita os cookies.</li></ul>
+<h2>Compartilhamento</h2><p>Usamos fornecedores de envio de e-mail, de mensagens e de análise de dados apenas para as finalidades acima. Não vendemos seus dados.</p>
+<h2>Seus direitos</h2><p>Você pode pedir acesso, correção ou exclusão dos seus dados e cancelar as mensagens a qualquer momento pelo link no rodapé dos e-mails ou pelo <a href="/contato">contato</a>.</p>
+<h2>Cookies</h2><p>Cookies de medição e publicidade só são ativados depois que você clica em "Aceitar" no aviso de cookies.</p>
+<h2>Retenção</h2><p>Mantemos os dados enquanto houver relacionamento ou pelo prazo exigido em lei.</p>
+<p>Contato do responsável: <% if (s.support_email) { %><a href="mailto:<%= s.support_email %>"><%= s.support_email %></a><% } else { %>pelo WhatsApp<% } %>.</p>
+</div></section>
+<%- include('../partials/footer') %>

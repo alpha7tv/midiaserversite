@@ -1,0 +1,29 @@
+<%- include('../partials/head') %>
+<section class="page-hero"><div class="wrap">
+  <span class="badge">Para quem já tem painel Sigma</span>
+  <h1><%= seo.h1 %></h1>
+  <p class="lead">Continue usando o seu próprio painel Sigma e conecte-o ao servidor Cine Pulse. Você mantém sua marca e seus clientes, e ganha DNS exclusiva e suporte 24 horas direto com o dono.</p>
+</div></section>
+<section class="sec" style="padding-top:10px"><div class="wrap">
+  <div class="grid"><% plansBy('apontamento').forEach(p => { %><%- include('../partials/plan-card', { p, link: null }) %><% }) %></div>
+</div></section>
+<section class="sec sec-alt"><div class="wrap prose">
+  <h2>O que é apontamento IPTV</h2>
+  <p>No apontamento, o seu painel Sigma passa a usar o servidor da Cine Pulse. Você continua gerenciando clientes, preços e renovações no seu painel, enquanto a transmissão e a infraestrutura ficam com a gente. O valor é mensal e definido pela quantidade de logins ativos.</p>
+  <h2>Como funciona a contratação</h2>
+  <div class="steps" style="margin:20px 0">
+    <div class="card"><h3>Escolha a faixa</h3><p>Até 600 ativos, até 3000 ativos ou sem limite.</p></div>
+    <div class="card"><h3>Configuração</h3><p>Nossa equipe faz o apontamento do servidor para o seu painel Sigma.</p></div>
+    <div class="card"><h3>DNS exclusiva</h3><p>Você recebe uma DNS exclusiva no nosso sistema integrado.</p></div>
+    <div class="card"><h3>Suporte 24h</h3><p>Fale com o dono sempre que precisar.</p></div>
+  </div>
+  <h2>Apontamento, painel mensalista ou franquia?</h2>
+  <p>Se você ainda não tem painel, comece pelo <a href="/revenda-iptv">painel mensalista</a>. Se quer marca, aplicativo e DNS próprios com créditos ilimitados, veja a <a href="/franquia-iptv">franquia</a>. Para carteiras muito grandes, também <a href="/iptv-para-provedores">montamos servidores</a>.</p>
+</div></section>
+<%- include('../partials/faq', { faqs: [
+  ['O que conta como login ativo?', 'Cada cliente com acesso ativo no seu painel naquele momento.'],
+  ['Preciso trocar de painel?', 'Não. O apontamento é feito para o painel Sigma que você já usa.'],
+  ['Quanto tempo leva para ativar?', 'Combine o horário com o dono pelo WhatsApp. A configuração é acompanhada pelo nosso suporte.'],
+] }) %>
+<%- include('../partials/cta', { ctaTitle: 'Aponte seu painel para a Cine Pulse', ctaText: 'A partir de R$ 250,00 mensais, com DNS exclusiva e suporte 24 horas.', ctaLink: '/contato', ctaLinkText: 'Enviar mensagem' }) %>
+<%- include('../partials/footer') %>

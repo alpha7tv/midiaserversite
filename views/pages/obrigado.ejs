@@ -1,0 +1,11 @@
+<%- include('../partials/head') %>
+<section class="page-hero" style="min-height:50vh"><div class="wrap" style="text-align:center">
+  <h1><%= seo.h1 %></h1>
+  <% if (tipo === 'teste') { %><p class="lead" style="margin:0 auto">Seu teste está sendo gerado e chega em instantes no seu WhatsApp e e-mail. Confira também a caixa de spam.</p>
+  <% } else if (tipo === 'contato') { %><p class="lead" style="margin:0 auto">Recebemos sua mensagem e vamos responder em breve.</p><% } %>
+  <div class="ctas" style="justify-content:center"><a class="btn btn-wa" href="<%= wa() %>" target="_blank" rel="noopener" data-track="whatsapp">Falar no WhatsApp</a><a class="btn btn-ghost" href="/">Voltar ao início</a></div>
+</div></section>
+<% if (tipo === 'teste' || tipo === 'contato') { %>
+<script>window.addEventListener('load',function(){try{if(window.gtag){gtag('event','generate_lead',{form:'<%= tipo %>'});if(CP.gads&&CP.gadsLead)gtag('event','conversion',{send_to:CP.gads+'/'+CP.gadsLead});}if(window.fbq)fbq('track','Lead');}catch(e){}});</script>
+<% } %>
+<%- include('../partials/footer') %>

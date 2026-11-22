@@ -1,0 +1,10 @@
+<article class="card plan<%= p.highlight ? ' hl' : '' %>">
+  <% if (p.highlight) { %><span class="ribbon">Mais escolhido</span><% } %>
+  <h3><%= p.name %></h3>
+  <div class="price"><%= brl(p.price) %></div>
+  <div class="per"><%= p.period %></div>
+  <% if (p.short) { %><p><%= p.short %></p><% } %>
+  <ul><% (p.features || '').split('\n').filter(Boolean).forEach(f => { %><li><%= f %></li><% }) %></ul>
+  <a class="btn" href="<%= wa('Olá! Quero contratar o plano ' + p.name + ' (' + brl(p.price) + ' ' + p.period + ') da Cine Pulse.') %>" target="_blank" rel="noopener" data-track="whatsapp">Contratar pelo WhatsApp</a>
+  <% if (typeof link !== 'undefined' && link) { %><a class="more" href="<%= link %>">Ver detalhes do <%= p.name.toLowerCase() %></a><% } %>
+</article>

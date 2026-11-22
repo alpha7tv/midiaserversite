@@ -1,0 +1,20 @@
+<%- include('_top') %>
+<h1><%= plan.id ? 'Editar plano' : 'Novo plano' %></h1>
+<form method="post" action="/admin/planos/<%= plan.id || 'novo' %>" class="card">
+<div class="row">
+<div><label>Categoria</label><select name="category"><% [['cliente','Cliente final'],['revenda','Revenda mensalista'],['apontamento','Apontamento'],['franquia','Franquia']].forEach(c => { %><option value="<%= c[0] %>" <%= plan.category === c[0] ? 'selected' : '' %>><%= c[1] %></option><% }) %></select></div>
+<div><label>Nome</label><input name="name" required value="<%= plan.name || '' %>"></div>
+<div><label>Slug (URL)</label><input name="slug" value="<%= plan.slug || '' %>"></div>
+<div><label>Créditos / limite</label><input name="credits" value="<%= plan.credits || '' %>"></div>
+<div><label>Preço (R$)</label><input name="price" required value="<%= plan.price != null ? String(plan.price).replace('.', ',') : '' %>"></div>
+<div><label>Período</label><input name="period" value="<%= plan.period || 'por mês' %>"></div>
+<div><label>Ordem</label><input name="sort" type="number" value="<%= plan.sort %>"></div>
+</div>
+<label>Resumo</label><input name="short" value="<%= plan.short || '' %>">
+<label>Para quem é (texto da página do plano)</label><input name="audience" value="<%= plan.audience || '' %>">
+<label>Benefícios (um por linha)</label><textarea name="features" rows="6"><%= plan.features || '' %></textarea>
+<label><input type="checkbox" name="highlight" value="1" <%= plan.highlight ? 'checked' : '' %>> Destacar como "Mais escolhido"</label>
+<label><input type="checkbox" name="active" value="1" <%= plan.active ? 'checked' : '' %>> Ativo no site</label>
+<button class="btn">Salvar</button><% if (plan.id) { %> <button class="btn btn-del" name="action" value="excluir" onclick="return confirm('Excluir plano?')">Excluir</button><% } %>
+</form>
+<%- include('_bottom') %>

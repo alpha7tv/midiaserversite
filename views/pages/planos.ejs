@@ -1,0 +1,27 @@
+<%- include('../partials/head') %>
+<section class="page-hero"><div class="wrap">
+  <h1><%= seo.h1 %></h1>
+  <p class="lead">Escolha quanto tempo quer ficar com a Cine Pulse. Todos os planos de assinatura IPTV têm preço fixo, suporte 24 horas e funcionam em Smart TV, TV Box, celular e computador.</p>
+</div></section>
+<section class="sec" style="padding-top:10px"><div class="wrap">
+  <div class="grid"><% plansBy('cliente').forEach(p => { %><%- include('../partials/plan-card', { p, link: null }) %><% }) %></div>
+</div></section>
+<section class="sec sec-alt"><div class="wrap prose">
+  <h2>Quanto custa o IPTV da Cine Pulse por mês?</h2>
+  <p>No plano mensal você paga R$ 19,90. Quem escolhe períodos maiores paga menos por mês: o trimestral sai a R$ 45,90, o semestral a R$ 69,90 e o anual a R$ 119,90, o que dá menos de R$ 10,00 por mês.</p>
+  <table class="table"><thead><tr><th>Plano</th><th>Valor</th><th>Equivale a</th></tr></thead><tbody>
+  <% const meses = { mensal: 1, trimestral: 3, semestral: 6, anual: 12 }; plansBy('cliente').forEach(p => { %><tr><td><%= p.name %></td><td><%= brl(p.price) %></td><td><%= meses[p.slug] ? brl(p.price / meses[p.slug]) + '/mês' : '-' %></td></tr><% }) %>
+  </tbody></table>
+  <h2>O que está incluso em todos os planos</h2>
+  <ul><li>Suporte 24 horas pelo WhatsApp, inclusive para instalar no seu aparelho.</li><li>Sem taxa de instalação e sem fidelidade.</li><li>Uso em Smart TV, TV Box, celular e computador (<a href="/dispositivos">veja a compatibilidade</a>).</li></ul>
+  <h2>Como assinar</h2>
+  <p>Escolha o plano, toque em "Contratar pelo WhatsApp" e nossa equipe envia a forma de pagamento e os dados de acesso. Prefere conhecer antes? <a href="/teste-gratis">Peça o teste grátis</a>.</p>
+</div></section>
+<%- include('../partials/faq', { faqs: [
+  ['Tem fidelidade ou multa?', 'Não. Você paga o período que escolher e renova se quiser.'],
+  ['Qual internet preciso?', 'Uma conexão de banda larga ou fibra estável atende bem. Saiba mais em <a href="/como-funciona-iptv">como funciona o IPTV</a>.'],
+  ['Posso usar em mais de um aparelho?', 'Consulte o suporte para saber as condições de uso simultâneo do seu plano.'],
+  ['Quero revender, qual plano escolho?', 'Os planos desta página são para assistir. Para revender, veja a <a href="/revenda-iptv">revenda IPTV Cine Pulse</a>.'],
+] }) %>
+<%- include('../partials/cta', { ctaTitle: 'Ainda em dúvida?', ctaText: 'Teste grátis e veja na sua TV antes de assinar.', ctaLink: '/teste-gratis', ctaLinkText: 'Pedir teste grátis' }) %>
+<%- include('../partials/footer') %>

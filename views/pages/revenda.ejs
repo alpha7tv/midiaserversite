@@ -1,0 +1,41 @@
+<%- include('../partials/head') %>
+<section class="page-hero"><div class="wrap">
+  <span class="badge">Para revendedores</span>
+  <h1><%= seo.h1 %></h1>
+  <p class="lead">Seja revendedor IPTV com quem resolve: você trata direto com o dono, tem suporte 24 horas, recebe DNS exclusiva na hora e seus créditos nunca vencem no fim do mês.</p>
+  <div class="ctas"><a class="btn" href="#planos">Ver planos de revenda</a><a class="btn btn-ghost" href="<%= wa() %>" target="_blank" rel="noopener" data-track="whatsapp">Falar com o dono</a></div>
+</div></section>
+<section class="sec" style="padding-top:20px"><div class="wrap"><%- include('../partials/trust') %></div></section>
+<section class="sec sec-alt" id="planos"><div class="wrap">
+  <div class="sec-head"><h2>Planos de painel IPTV mensalista</h2><p>Escolha a quantidade de créditos por mês. Os créditos são acumulativos: o que você não vender continua no seu saldo.</p></div>
+  <div class="grid"><% plansBy('revenda').forEach(p => { %><%- include('../partials/plan-card', { p, link: '/revenda-iptv/' + p.slug }) %><% }) %></div>
+</div></section>
+<section class="sec"><div class="wrap prose">
+  <h2>Como funciona a revenda IPTV Cine Pulse</h2>
+  <div class="steps" style="margin:20px 0 30px">
+    <div class="card"><h3>Escolha o painel</h3><p>Contrate o painel mensalista com a quantidade de créditos ideal para o seu momento.</p></div>
+    <div class="card"><h3>Receba sua DNS</h3><p>Na contratação você já recebe uma DNS exclusiva e o acesso ao painel de gestão.</p></div>
+    <div class="card"><h3>Ative seus clientes</h3><p>Cadastre e renove clientes pelo painel. Cada ativação usa créditos do seu saldo.</p></div>
+    <div class="card"><h3>Cresça no seu ritmo</h3><p>Créditos não usados acumulam. Quando a carteira crescer, suba de plano.</p></div>
+  </div>
+  <h2>Por que revendedores escolhem tratar direto com o dono</h2>
+  <p>Quem já revendeu IPTV conhece o problema: o fornecedor é outro revendedor, a DNS cai, o suporte some e os clientes cobram você. Na Cine Pulse não existe intermediário. Você negocia, tira dúvidas e resolve problemas diretamente com o dono, com atendimento 24 horas.</p>
+  <h2>Sem problemas com DNS</h2>
+  <p>Muitos revendedores estão sofrendo com DNS compartilhada que muda ou para de funcionar. A Cine Pulse usa um sistema novo e integrado, e cada revendedor recebe sua própria DNS exclusiva assim que assina qualquer plano.</p>
+  <h2>Renda com qualidade e dedicação</h2>
+  <p>Hoje há revendedores que fizeram da Cine Pulse a sua renda principal. Não há fórmula mágica: o que funciona é atender bem, oferecer teste, responder rápido e cuidar de quem já é cliente. Nós entregamos a estrutura e o suporte para você focar nas vendas.</p>
+  <h2>Já revende e quer um site profissional?</h2>
+  <p>Criamos sites profissionais para revendedores. <a href="<%= s.sites_revenda_url %>" target="_blank" rel="noopener">Veja os modelos disponíveis</a>.</p>
+  <h2>Outros modelos de negócio</h2>
+  <p>Tem painel Sigma próprio? Conheça o <a href="/apontamento-iptv">apontamento IPTV</a>. Quer marca própria com aplicativo? Veja a <a href="/franquia-iptv">franquia IPTV</a>. Tem uma carteira grande ou é provedor? Veja <a href="/iptv-para-provedores">IPTV para provedores</a>.</p>
+</div></section>
+<%- include('../partials/faq', { faqs: [
+  ['O que são créditos acumulativos?', 'Cada mês você recebe a quantidade de créditos do seu plano. Se não usar todos, eles continuam no seu saldo para os meses seguintes.'],
+  ['Quanto custa para começar a revender IPTV?', 'O painel de entrada tem 10 créditos por R$ 50,00 mensais.'],
+  ['Recebo DNS exclusiva em qualquer plano?', 'Sim. Ao assinar qualquer plano de revenda você recebe de imediato uma DNS exclusiva.'],
+  ['Com quem falo quando tiver problema?', 'Direto com o dono da Cine Pulse, pelo WhatsApp, com suporte 24 horas.'],
+  ['Posso mudar de plano depois?', 'Sim. Fale com a gente para subir de plano quando a sua carteira crescer.'],
+  ['Painel mensalista, apontamento ou franquia: qual escolher?', 'Mensalista é para quem quer revender com créditos. Apontamento é para quem já tem painel Sigma. Franquia é para quem quer marca, app e DNS próprios com créditos ilimitados.'],
+] }) %>
+<%- include('../partials/cta', { ctaTitle: 'Comece sua revenda hoje', ctaText: 'Fale direto com o dono e receba sua DNS exclusiva na contratação.', ctaLink: '/teste-gratis?tipo=revenda', ctaLinkText: 'Testar a qualidade' }) %>
+<%- include('../partials/footer') %>

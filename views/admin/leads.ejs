@@ -1,0 +1,10 @@
+<%- include('_top') %>
+<h1>Leads</h1>
+<form class="filters" method="get"><input name="q" placeholder="Buscar nome, e-mail ou WhatsApp" value="<%= q %>">
+<select name="status"><option value="">Todos os status</option><% ['novo','aguardando_teste','teste_enviado','convertido','descadastrado'].forEach(x => { %><option <%= status === x ? 'selected' : '' %>><%= x %></option><% }) %></select>
+<select name="tipo"><option value="">Todos os tipos</option><% ['cliente','revenda','apontamento','franquia','provedor','site'].forEach(x => { %><option <%= tipo === x ? 'selected' : '' %>><%= x %></option><% }) %></select>
+<button class="btn">Filtrar</button><a class="btn btn2" href="/admin/leads.csv">Exportar CSV</a></form>
+<div class="tw"><table><tr><th>#</th><th>Data</th><th>Nome</th><th>E-mail</th><th>WhatsApp</th><th>Tipo</th><th>Origem</th><th>Status</th><th>Dia seq.</th></tr>
+<% leads.forEach(l => { %><tr><td><%= l.id %></td><td><%= l.created_at %></td><td><a href="/admin/leads/<%= l.id %>"><%= l.name %></a></td><td><%= l.email %></td><td><a href="https://wa.me/<%= l.whatsapp %>" target="_blank"><%= l.whatsapp %></a></td><td><%= l.type %></td><td><%= l.source %></td><td><span class="pill <%= l.status %>"><%= l.status %></span></td><td><%= l.seq_day %><%= l.seq_active ? ' ▶' : '' %></td></tr><% }) %>
+</table></div>
+<%- include('_bottom') %>
