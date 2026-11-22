@@ -3,6 +3,7 @@
 #   bash install.sh check     -> só inspeciona (não altera nada)
 #   bash install.sh install   -> instala/atualiza
 set -euo pipefail
+trap 'echo "ERRO na linha $LINENO: $BASH_COMMAND"' ERR
 APP_DIR=/opt/cinepulse
 DOMAIN=cinepulse.com.br
 MODE=${1:-check}
@@ -14,7 +15,8 @@ echo "== Quem ouve 80/443 =="; ss -tlnp '( sport = :80 or sport = :443 )' | tail
 echo "== nginx =="; (nginx -v 2>&1 && nginx -T 2>/dev/null | grep -E '^\s*server_name' | sort -u) || echo "nginx não encontrado no host"
 echo "== certbot =="; (certbot --version 2>&1 || echo "certbot não instalado")
 echo "== vhost cinepulse existente? =="; (grep -rl "$DOMAIN" /etc/nginx 2>/dev/null || echo "nenhum")
-[ "$MODE" = check ] && exit 0
+if [ "$MODE" = check ]; then exit 0; fi
+echo "== Instalando =="
 
 command -v docker >/dev/null || { echo "ERRO: docker não instalado"; exit 1; }
 docker compose version >/dev/null 2>&1 || { echo "ERRO: plugin docker compose ausente"; exit 1; }
@@ -27,7 +29,7 @@ cd "$APP_DIR"
 
 if [ ! -f .env ]; then
   PORT=3080; while ss -tln | awk '{print $4}' | grep -qE "[:.]$PORT$"; do PORT=$((PORT+1)); done
-  PASS=$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16)
+  PASS=$(od -An -N12 -tx1 /dev/urandom | tr -d ' \n')
   printf 'HOST_PORT=%s\nSITE_URL=https://%s\nADMIN_PASSWORD=%s\nSIGMA_URL=%s\n' "$PORT" "$DOMAIN" "$PASS" "${SIGMA_URL:-}" > .env
   chmod 600 .env
   echo ">> Senha inicial do admin: $PASS  (guardada em $APP_DIR/.env)"
@@ -35,7 +37,7 @@ fi
 PORT=$(grep ^HOST_PORT .env | cut -d= -f2)
 
 docker compose up -d --build
-sleep 4; curl -fsS "http://127.0.0.1:$PORT/healthz" && echo " <- app ok na porta $PORT"
+for i in $(seq 1 30); do curl -fsS "http://127.0.0.1:$PORT/healthz" >/dev/null 2>&1 && { echo ">> app ok na porta $PORT"; break; }; sleep 2; done
 
 VHOST=/etc/nginx/sites-available/$DOMAIN
 if [ -d /etc/nginx/sites-available ]; then
