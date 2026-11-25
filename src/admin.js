@@ -161,9 +161,10 @@ const SETTING_KEYS = ['site_url', 'whatsapp_number', 'support_email', 'trailer_y
   'gtm_id', 'ga4_id', 'gads_id', 'gads_label_lead', 'gads_label_whatsapp', 'meta_pixel_id', 'google_site_verification', 'extra_head',
   'smtp_host', 'smtp_port', 'smtp_secure', 'smtp_user', 'mail_from', 'wa_provider', 'wa_url', 'wa_instance',
   'sigma_enabled', 'sigma_url', 'sigma_method', 'sigma_headers', 'sigma_body', 'sigma_path_user', 'sigma_path_pass', 'sigma_path_message',
-  'test_email_subject', 'test_message', 'test_pending_message', 'seq_send_hour_start', 'seq_send_hour_end'];
+  'test_email_subject', 'test_message', 'test_pending_message', 'seq_send_hour_start', 'seq_send_hour_end',
+  'tv_instructions', 'tutorial_enabled', 'tutorial_delay_sec', 'tutorial_video_path', 'tutorial_caption', 'tutorial_email_subject', 'followup_enabled', 'followup_hours', 'followup_message'];
 const SECRET_KEYS = ['smtp_pass', 'wa_token', 'wa_client_token'];
-const CHECKBOXES = ['popup_enabled', 'smtp_secure', 'sigma_enabled'];
+const CHECKBOXES = ['popup_enabled', 'smtp_secure', 'sigma_enabled', 'tutorial_enabled', 'followup_enabled'];
 
 router.get('/configuracoes', (req, res) => view(res, 'settings', { msg: req.query.msg || null }));
 router.post('/configuracoes', async (req, res) => {

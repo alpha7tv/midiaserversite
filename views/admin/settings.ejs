@@ -55,6 +55,16 @@
 <label>Mensagem com os dados do teste ({{nome}} {{dados}} = mensagem do painel ou usuário/senha; também {{usuario}} {{senha}} {{info}})</label><textarea name="test_message" rows="6"><%= s.test_message %></textarea>
 <label>Mensagem quando o teste precisa de envio manual</label><textarea name="test_pending_message" rows="3"><%= s.test_pending_message %></textarea></div>
 
+<div class="card"><h2 style="margin-top:0">Smart TV, tutorial e acompanhamento</h2>
+<label>Instruções Smart TV LG/Samsung (vão junto com os dados do teste no e-mail e WhatsApp)</label><textarea name="tv_instructions" rows="6"><%= s.tv_instructions %></textarea>
+<label><input type="checkbox" name="tutorial_enabled" value="1" <%= s.tutorial_enabled === '1' ? 'checked' : '' %>> Enviar vídeo tutorial depois do teste (WhatsApp + e-mail)</label>
+<div class="row"><div><label>Enviar após (segundos)</label><input name="tutorial_delay_sec" value="<%= s.tutorial_delay_sec %>"></div><div><label>Arquivo do vídeo</label><input name="tutorial_video_path" value="<%= s.tutorial_video_path %>"><small><a href="/tutorial-smart-tv" target="_blank">ver página do tutorial</a></small></div></div>
+<label>Legenda do vídeo no WhatsApp</label><textarea name="tutorial_caption" rows="2"><%= s.tutorial_caption %></textarea>
+<label>Assunto do e-mail do tutorial</label><input name="tutorial_email_subject" value="<%= s.tutorial_email_subject %>">
+<label><input type="checkbox" name="followup_enabled" value="1" <%= s.followup_enabled === '1' ? 'checked' : '' %>> Chamar no WhatsApp quando o teste acabar</label>
+<div class="row"><div><label>Horas depois do teste</label><input name="followup_hours" value="<%= s.followup_hours %>"><small>Se cair entre 22h e 8h, espera até as 8h.</small></div></div>
+<label>Mensagem de acompanhamento ({{nome}})</label><textarea name="followup_message" rows="5"><%= s.followup_message %></textarea></div>
+
 <div class="card"><h2 style="margin-top:0">Sequência e segurança</h2><div class="row">
 <div><label>Enviar a partir de (hora)</label><input name="seq_send_hour_start" value="<%= s.seq_send_hour_start %>"></div>
 <div><label>Enviar até (hora)</label><input name="seq_send_hour_end" value="<%= s.seq_send_hour_end %>"></div>

@@ -85,7 +85,9 @@ app.get('/teste-gratis', (req, res) => render(res, 'pages/teste', '/teste-gratis
 app.get('/contato', (req, res) => render(res, 'pages/contato', '/contato', { breadcrumbs: [['Contato', '/contato']], erro: null, form: {} }));
 app.get('/politica-de-privacidade', (req, res) => render(res, 'pages/privacidade', '/politica-de-privacidade'));
 app.get('/termos-de-uso', (req, res) => render(res, 'pages/termos', '/termos-de-uso'));
-app.get('/obrigado', (req, res) => render(res, 'pages/obrigado', '/obrigado', { noindex: true, tipo: req.query.t || 'teste', seo: { title: 'Obrigado | Cine Pulse', description: '', h1: 'Pedido recebido!', wa: 'Olá! Acabei de me cadastrar no site da Cine Pulse.' } }));
+app.get('/tutorial-smart-tv', (req, res) => render(res, 'pages/tutorial', '/tutorial-smart-tv', { noindex: true, seo: { title: 'Tutorial Smart TV LG e Samsung | Cine Pulse', description: 'Como instalar a Cine Pulse na Smart TV LG ou Samsung com o aplicativo Media Station.', h1: 'Como instalar na Smart TV LG e Samsung', wa: 'Olá! Preciso de ajuda para instalar na minha Smart TV.' } }));
+const cookieVal = (req, k) => { const m = (req.headers.cookie || '').match(new RegExp('(?:^|;\\s*)' + k + '=([^;]*)')); try { return m ? decodeURIComponent(m[1]) : ''; } catch { return ''; } };
+app.get('/obrigado', (req, res) => render(res, 'pages/obrigado', '/obrigado', { noindex: true, tipo: req.query.t || 'teste', nome: cookieVal(req, 'cp_nome'), seo: { title: 'Obrigado | Cine Pulse', description: '', h1: 'Pedido recebido!', wa: 'Olá! Acabei de me cadastrar no site da Cine Pulse.' } }));
 
 // Redirecionamentos amigáveis (rotas comuns -> canônicas)
 const redirects = { '/teste': '/teste-gratis', '/revenda': '/revenda-iptv', '/painel-mensalista': '/revenda-iptv', '/painel-iptv': '/revenda-iptv', '/franquia': '/franquia-iptv', '/apontamento': '/apontamento-iptv', '/provedores': '/iptv-para-provedores', '/assinar': '/planos' };
@@ -117,6 +119,8 @@ app.post('/teste-gratis', async (req, res) => {
   const r = db.prepare("INSERT INTO leads(name,email,whatsapp,type,source,status,consent,unsub_token,utm,ip) VALUES(?,?,?,?,'teste','novo',1,?,?,?)")
     .run(form.name, form.email, phone, form.tipo, crypto.randomBytes(16).toString('hex'), utmOf(b), req.ip);
   trial.processNewTrial(Number(r.lastInsertRowid)).catch((e) => console.error('trial', e));
+  const first = form.name.split(/\s+/)[0].slice(0, 40);
+  res.setHeader('Set-Cookie', `cp_nome=${encodeURIComponent(first)}; Path=/obrigado; Max-Age=900; SameSite=Lax; HttpOnly${req.secure ? '; Secure' : ''}`);
   res.redirect(303, '/obrigado?t=teste');
 });
 

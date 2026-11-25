@@ -31,5 +31,10 @@ async function tick() {
   finally { running = false; }
 }
 
-function start() { setInterval(tick, 10 * 60 * 1000); setTimeout(tick, 15000); }
-module.exports = { start, tick };
+let jobsRunning = false;
+async function jobsTick() {
+  if (jobsRunning) return; jobsRunning = true;
+  try { await require('./trial').runJobs(); } catch (e) { console.error('jobs', e); } finally { jobsRunning = false; }
+}
+function start() { setInterval(tick, 10 * 60 * 1000); setTimeout(tick, 15000); setInterval(jobsTick, 10 * 1000); }
+module.exports = { start, tick, jobsTick };

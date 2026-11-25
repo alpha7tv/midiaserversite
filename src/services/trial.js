@@ -1,6 +1,6 @@
 // Geração automática de teste via webhook do painel (Sigma "chatbot") + envio por e-mail e WhatsApp.
 const { db, getSettings } = require('../db');
-const { fill, esc, sendEmail, sendWhatsApp, normalizePhone, log } = require('./messaging');
+const { fill, esc, sendEmail, sendWhatsApp, sendWhatsAppVideo, normalizePhone, log } = require('./messaging');
 
 const getPath = (obj, p) => (p ? p.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj) : undefined);
 const jsonEsc = (v) => JSON.stringify(String(v ?? '')).slice(1, -1);
@@ -43,11 +43,49 @@ async function deliverTest(leadId) {
   if (!lead) return;
   const dados = lead.test_info && lead.test_info.trim() ? lead.test_info.trim() : `Usuário: ${lead.test_user || ''}\nSenha: ${lead.test_pass || ''}`;
   const v = { nome: (lead.name || '').split(' ')[0], usuario: lead.test_user || '', senha: lead.test_pass || '', info: lead.test_info || '', dados };
-  const text = fill(s.test_message, v);
+  const text = fill(s.test_message, v) + (s.tv_instructions ? '\n\n' + fill(s.tv_instructions, v) : '');
   const html = `<p>${esc(text).replace(/\n/g, '<br>')}</p><p style="text-align:center;margin:28px 0"><a href="{{whatsapp}}" style="background:linear-gradient(90deg,#e50914,#ff6a00);color:#fff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:8px;display:inline-block">Preciso de ajuda para instalar</a></p>`;
   await Promise.all([sendEmail(lead, s.test_email_subject, html, 'teste'), sendWhatsApp(lead, text, 'teste')]);
   db.prepare("UPDATE leads SET status='teste_enviado', test_sent_at=datetime('now') WHERE id=?").run(leadId);
+  scheduleAfterTest(leadId, s);
   startSequence(leadId);
+}
+
+function addJob(leadId, kind, seconds) {
+  db.prepare('DELETE FROM jobs WHERE lead_id=? AND kind=? AND done=0').run(leadId, kind);
+  db.prepare(`INSERT INTO jobs(lead_id,kind,run_at) VALUES(?,?,datetime('now','+${Math.max(0, Math.round(seconds))} seconds'))`).run(leadId, kind);
+}
+function scheduleAfterTest(leadId, s) {
+  if (s.tutorial_enabled === '1') addJob(leadId, 'tutorial', Number(s.tutorial_delay_sec) || 30);
+  if (s.followup_enabled === '1') addJob(leadId, 'followup', (Number(s.followup_hours) || 4) * 3600);
+}
+
+// Executa tarefas agendadas (tutorial 30s depois, acompanhamento 4h depois)
+async function runJobs() {
+  const due = db.prepare("SELECT * FROM jobs WHERE done=0 AND run_at <= datetime('now') ORDER BY run_at LIMIT 20").all();
+  for (const j of due) {
+    db.prepare('UPDATE jobs SET done=1 WHERE id=?').run(j.id);
+    const lead = db.prepare('SELECT * FROM leads WHERE id=?').get(j.lead_id);
+    if (!lead || lead.status === 'descadastrado') continue;
+    const s = getSettings();
+    const base = s.site_url.replace(/\/$/, '');
+    const v = { nome: (lead.name || '').split(' ')[0] };
+    try {
+      if (j.kind === 'tutorial') {
+        const videoUrl = base + (s.tutorial_video_path || '/video/tutorial-media-station.mp4');
+        const html = `<p>Olá, ${esc(v.nome)}!</p><p>Preparamos um vídeo rápido mostrando como instalar a Cine Pulse na <b>Smart TV LG ou Samsung</b>:</p>
+<ol><li>Baixe na loja da TV o aplicativo <b>Media Station</b></li><li>Abra o app e clique em <b>Start Parameter</b></li><li>Digite o endereço <b>appcinevs.site</b></li><li>Entre com o usuário e a senha do seu teste</li></ol>
+<p style="text-align:center;margin:24px 0"><a href="${base}/tutorial-smart-tv"><img src="${base}/video/tutorial-poster.jpg" width="480" alt="Assistir ao tutorial" style="max-width:100%;border-radius:8px;border:0"></a></p>
+<p style="text-align:center;margin:20px 0"><a href="${base}/tutorial-smart-tv" style="background:linear-gradient(90deg,#e50914,#ff6a00);color:#fff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:8px;display:inline-block">▶ Assistir ao tutorial</a></p>`;
+        await Promise.all([sendWhatsAppVideo(lead, videoUrl, s.tutorial_caption, 'tutorial'), sendEmail(lead, s.tutorial_email_subject, html, 'tutorial')]);
+      } else if (j.kind === 'followup') {
+        if (lead.status === 'convertido') continue;
+        const h = Number(new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', hour12: false }).format(new Date()));
+        if (h < 8 || h >= 22) { db.prepare("UPDATE jobs SET done=0, run_at=datetime('now','+30 minutes') WHERE id=?").run(j.id); continue; } // não chama de madrugada
+        await sendWhatsApp(lead, fill(s.followup_message, v), 'acompanhamento_4h');
+      }
+    } catch (e) { log(lead.id, 'job', j.kind, 'erro', e.message); }
+  }
 }
 
 async function processNewTrial(leadId) {
@@ -67,4 +105,4 @@ async function processNewTrial(leadId) {
   startSequence(leadId);
 }
 
-module.exports = { processNewTrial, deliverTest, requestTest, parseCreds };
+module.exports = { processNewTrial, deliverTest, requestTest, parseCreds, runJobs };

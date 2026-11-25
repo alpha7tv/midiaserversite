@@ -90,4 +90,23 @@ async function sendWhatsApp(lead, text, kind = 'whatsapp') {
   } catch (e) { log(lead.id, 'whatsapp', kind, 'erro', e.message); return false; }
 }
 
-module.exports = { fill, esc, vars, waLink, sendEmail, sendWhatsApp, normalizePhone, emailLayout, log };
+async function sendWhatsAppVideo(lead, videoUrl, caption, kind = 'tutorial') {
+  const s = getSettings();
+  const phone = normalizePhone(lead.whatsapp);
+  if (s.wa_provider === 'off' || !s.wa_url || !phone) { log(lead.id, 'whatsapp', kind, 'skip', 'API de WhatsApp não configurada'); return false; }
+  const text = fill(caption, vars(s, lead));
+  if (s.wa_provider === 'evolution') {
+    const url = `${s.wa_url.replace(/\/$/, '')}/message/sendMedia/${s.wa_instance}`;
+    try {
+      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: s.wa_token },
+        body: JSON.stringify({ number: phone, mediatype: 'video', mimetype: 'video/mp4', caption: text, media: videoUrl, fileName: 'tutorial-cinepulse.mp4' }), signal: AbortSignal.timeout(60000) });
+      if (!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0, 200)}`);
+      log(lead.id, 'whatsapp', kind, 'ok');
+      return true;
+    } catch (e) { log(lead.id, 'whatsapp', kind + '_video', 'erro', e.message); }
+  }
+  // outros provedores ou falha no vídeo: envia o link
+  return sendWhatsApp(lead, `${text}\n\n▶️ Assista: ${videoUrl}`, kind);
+}
+
+module.exports = { sendWhatsAppVideo, fill, esc, vars, waLink, sendEmail, sendWhatsApp, normalizePhone, emailLayout, log };

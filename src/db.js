@@ -39,6 +39,12 @@ CREATE TABLE IF NOT EXISTS message_log (
   lead_id INTEGER, channel TEXT, kind TEXT, status TEXT, error TEXT,
   created_at TEXT DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS jobs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  lead_id INTEGER, kind TEXT NOT NULL, run_at TEXT NOT NULL, done INTEGER DEFAULT 0,
+  created_at TEXT DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_jobs_due ON jobs(done, run_at);
 CREATE TABLE IF NOT EXISTS seo (path TEXT PRIMARY KEY, title TEXT, description TEXT, h1 TEXT, keywords TEXT, wa TEXT);
 `);
 
@@ -69,6 +75,15 @@ const DEFAULT_SETTINGS = {
   test_email_subject: '🎬 Seu teste Cine Pulse chegou, {{nome}}!',
   test_message: 'Olá {{nome}}! Seu teste Cine Pulse está liberado 🎬\n\n{{dados}}\n\nPrecisa de ajuda para instalar? Responda esta mensagem. Suporte 24h.',
   test_pending_message: 'Olá {{nome}}! Recebemos seu pedido de teste na Cine Pulse 🎬 Em instantes nossa equipe envia seus dados de acesso por aqui.',
+  // Instruções Smart TV LG/Samsung (vão junto com os dados do teste)
+  tv_instructions: '📺 Vai testar na Smart TV LG ou Samsung?\n1. Baixe na loja da TV o aplicativo *Media Station*\n2. Abra o app e clique em *Start Parameter*\n3. Digite o endereço: appcinevs.site\n4. Entre com o usuário e a senha do seu teste\n\nEm instantes enviamos um vídeo mostrando o passo a passo.',
+  // Tutorial em vídeo (enviado separado, alguns segundos depois do teste)
+  tutorial_enabled: '1', tutorial_delay_sec: '30', tutorial_video_path: '/video/tutorial-media-station.mp4',
+  tutorial_caption: '🎬 Tutorial Cine Pulse: como instalar na Smart TV LG e Samsung com o app Media Station. Endereço: appcinevs.site',
+  tutorial_email_subject: '📺 {{nome}}, veja como instalar a Cine Pulse na sua Smart TV',
+  // Acompanhamento quando o teste acaba
+  followup_enabled: '1', followup_hours: '4',
+  followup_message: 'Olá {{nome}}! Aqui é da Cine Pulse 🎬 Seu teste de 4 horas terminou. Deu tudo certo? Conseguiu testar? 😊\n\nSe tiver interesse, podemos fechar um plano para você assistir ou começar a sua revenda junto conosco, com DNS exclusiva e suporte 24h direto com o dono. É só responder esta mensagem!',
   seq_send_hour_start: '9', seq_send_hour_end: '20',
   admin_password_hash: '',
 };
