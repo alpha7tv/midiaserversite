@@ -32,8 +32,8 @@ h1,h2,h3{line-height:1.2;margin:0 0 .6em;letter-spacing:-.01em}h1{font-size:clam
 .path::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--grad)}.path p{color:var(--mut)}
 @media(max-width:760px){.paths{grid-template-columns:1fr}}
 .row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
-.tile{flex:0 0 200px;height:120px;border-radius:8px;scroll-snap-align:start;display:flex;align-items:flex-end;padding:14px;font-weight:800;font-size:1.1rem;position:relative;overflow:hidden;transition:transform .2s}
-.tile:hover{transform:scale(1.05)}.tile span{position:relative;z-index:1}.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.6),transparent)}
+.tile{flex:0 0 240px;height:140px;background:#1a1a1a;border-radius:8px;scroll-snap-align:start;display:flex;align-items:flex-end;padding:14px;font-weight:800;font-size:1.1rem;position:relative;overflow:hidden;transition:transform .2s}
+.tile:hover{transform:scale(1.05)}.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.tile span{text-shadow:0 2px 8px rgba(0,0,0,.9)}.tile span{position:relative;z-index:1}.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.6),transparent)}
 .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
 .card{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column}.card p{color:var(--mut)}
 .feat .ico{font-size:1.8rem;margin-bottom:8px}

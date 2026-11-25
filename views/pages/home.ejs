@@ -29,8 +29,8 @@
 <section class="sec" style="padding-top:0"><div class="wrap">
   <h2 style="font-size:1.4rem">Tudo em um só lugar</h2>
   <div class="row" role="list">
-    <% [['Filmes','#7a0b10','#e50914'],['Séries','#3b0d0d','#ff6a00'],['Canais ao vivo','#1a1a1a','#e50914'],['Infantil','#5a1e00','#ff8c3a'],['Documentários','#1e1e1e','#b20710'],['Sob demanda','#2b0505','#ff6a00']].forEach(t => { %>
-      <div class="tile" role="listitem" style="background:linear-gradient(135deg,<%= t[1] %>,<%= t[2] %>)"><span><%= t[0] %></span></div>
+    <% [['Filmes','filmes','Claquete de cinema e pipoca'],['Séries','series','Televisor e rolo de filme'],['Canais ao vivo','ao-vivo','Antena parabólica com sinal ao vivo'],['Infantil','infantil','Ursinho de pelúcia e balão'],['Documentários','documentarios','Globo terrestre e leão'],['Sob demanda','sob-demanda','Celular e botão de play']].forEach(t => { %>
+      <div class="tile" role="listitem"><img src="/img/cat/<%= t[1] %>.webp" width="480" height="280" alt="<%= t[2] %>" loading="lazy" decoding="async"><span><%= t[0] %></span></div>
     <% }) %>
   </div>
   <p style="color:var(--mut);font-size:.85rem;margin-top:8px">A grade disponível pode variar. Consulte nosso suporte antes de contratar.</p>

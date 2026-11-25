@@ -25,7 +25,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <% if (s.google_site_verification) { %><meta name="google-site-verification" content="<%= s.google_site_verification %>"><% } %>
 <link rel="preload" as="image" href="/img/logo-sm.webp" type="image/webp">
-<link rel="stylesheet" href="/css/style.css?v=1">
+<link rel="stylesheet" href="/css/style.css?v=2">
 <%
   const ld = [{ '@context': 'https://schema.org', '@type': 'Organization', name: 'Cine Pulse', url: base + '/', logo: base + '/img/logo.png',
     contactPoint: s.whatsapp_number ? [{ '@type': 'ContactPoint', telephone: '+' + s.whatsapp_number, contactType: 'customer service', availableLanguage: 'Portuguese', hoursAvailable: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], opens: '00:00', closes: '23:59' } }] : undefined }];
